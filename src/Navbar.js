@@ -1,4 +1,6 @@
 import React from 'react';
+import profile from './img/profile.svg'
+import { Link } from "react-router-dom";
 
 export default class Navbar extends React.Component {
   state = { activeItem: 'home' }
@@ -8,26 +10,28 @@ export default class Navbar extends React.Component {
   render() {
     return (
       <nav className="navbar has-shadow" role="navigation" aria-label="main navigation">
-        <div className="navbar-brand">
-          <a className="navbar-item" href="https://bulma.io">
-            <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28" alt="" />
-          </a>
+        <div className="container">
+          <div className="navbar-brand">
+            <Link to="/" className="navbar-item">
+              <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28" alt="" />
+            </Link>
 
-          <a role="button" className="navbar-burger" aria-label="menu" aria-expanded="false">
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-          </a>
-        </div>
+            <a role="button" className="navbar-burger" aria-label="menu" aria-expanded="false">
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+            </a>
+          </div>
 
-        <div id="navbarBasicExample" class="navbar-menu">
-          <div class="navbar-end">
-            <div class="navbar-item">
-              <div class="buttons">
-                <a class="button is-primary">
-                  <strong>Sign up</strong>
-                </a>
-                <a class="button is-light">
+          <div id="navbarBasicExample" className="navbar-menu">
+            <div className="navbar-end">
+              <div className="navbar-item">
+                <Link to="/user/takato">
+                  <img src={profile} class="is-rounded" width="32" />
+                </Link>
+              </div>
+              <div className="navbar-item">
+                <a className="button is-simple is-outlined is-rounded">
                   Log in
                 </a>
               </div>
