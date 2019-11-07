@@ -1,6 +1,7 @@
 import React from 'react';
 import profile from './img/profile.svg'
 import { Link } from "react-router-dom";
+import logo from './img/logo.png'
 
 export default class Navbar extends React.Component {
   state = { activeItem: 'home' }
@@ -13,7 +14,7 @@ export default class Navbar extends React.Component {
         <div className="container">
           <div className="navbar-brand">
             <Link to="/" className="navbar-item">
-              <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28" alt="" />
+              <img src={logo} alt="360gram" />
             </Link>
 
             <a role="button" className="navbar-burger" aria-label="menu" aria-expanded="false">
@@ -27,7 +28,7 @@ export default class Navbar extends React.Component {
             <div className="navbar-end">
               <div className="navbar-item">
                 <Link to="/user/takato">
-                  <img src={profile} class="is-rounded" width="32" />
+                  <img src={profile} className="is-rounded" width="32" />
                 </Link>
               </div>
               <div className="navbar-item">
