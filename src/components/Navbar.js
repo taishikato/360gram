@@ -1,12 +1,24 @@
 import React from 'react';
-import profile from './img/profile.svg'
+import profile from '../img/profile.svg'
 import { Link } from "react-router-dom";
-import logo from './img/logo.png'
+import logo from '../img/logo.png'
+import Modal from 'react-modal'
+import LoginModal from './LoginModal'
 
 export default class Navbar extends React.Component {
-  state = { activeItem: 'home' }
+  state = {
+    showModal: false
+  }
 
-  handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+  handleOpenModal = () => {
+    console.log('handleOpenModal')
+    this.setState({ showModal: true })
+    console.log(this.state.showModal)
+  }
+
+  handleCloseModal = () => {
+    this.setState({ showModal: false })
+  }
 
   render() {
     return (
@@ -32,13 +44,39 @@ export default class Navbar extends React.Component {
                 </Link>
               </div>
               <div className="navbar-item">
-                <a className="button is-simple is-outlined is-rounded">
+                <a
+                  className="button is-simple is-outlined is-rounded"
+                  onClick={this.handleOpenModal}
+                >
                   Log in
                 </a>
               </div>
             </div>
           </div>
         </div >
+
+        <Modal
+          isOpen={this.state.showModal}
+          onRequestClose={this.handleCloseModal}
+          style={{
+            overlay: {
+              zIndex: 100000,
+              backgroundColor: 'rgba(0, 0, 0, 0.7)'
+            },
+            content: {
+              width: '600px',
+              maxWidth: '100%',
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translateY(-50%)translateX(-50%)',
+              border: 'none',
+              backgroundColor: 'transparent'
+            }
+          }}
+        >
+          <LoginModal />
+        </Modal>
       </nav >
     )
   }

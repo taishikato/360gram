@@ -1,11 +1,11 @@
 import React from 'react';
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import Navbar from './Navbar'
+import Navbar from './components/Navbar'
+import ScrollToTop from './components/ScrollToTop'
 import Top from './top/Top'
 import Profile from './profile/Profile'
 import Photo from './photo/Photo'
-import ScrollToTop from './ScrollToTop'
-import './Bulma.scss';
+import './assets/Bulma.scss';
 import './App.scss';
 
 export default class App extends React.Component {

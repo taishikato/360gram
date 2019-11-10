@@ -1,0 +1,27 @@
+#login-modal {
+    text-align: center;
+    color: white;
+    .button {
+        width: 300px;
+        margin: 0 auto 20px;
+        text-align: left;
+        border: none;
+        &:hover {
+            border: none;
+        }
+        &.is-google {
+            background: white;
+            &:hover {
+                color: hsl(0, 0%, 48%);
+            }
+        }
+        &.is-facebook {
+            background: #4267B2;
+            color: white;
+            &:hover {
+                color: white;
+                background: #6285ce;
+            }
+        }
+    }
+}
