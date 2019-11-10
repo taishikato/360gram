@@ -1,0 +1,25 @@
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read;
+    }
+    match /users/{userId} {
+      allow write: if request.auth.uid == userId;
+    }
+    match /users/{userId}/likePosts/{document=**} {
+      allow write: if request.auth.uid == userId;
+    }
+    match /users/{userId}/posts/{document=**} {
+      allow write: if request.auth.uid == userId;
+    }
+    match /posts/{document=**} {
+      allow write: if request.auth.uid != null;
+    }
+    match /posts/{postId}/comments/{document=**} {
+      allow write: if request.auth.uid != null;
+    }
+    match /likes/{document=**} {
+      allow write: if request.auth.uid != null;
+    }
+  }
+}

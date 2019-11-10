@@ -1,6 +1,4 @@
 import React from 'react';
-import myImage from "../img/360.JPG";
-import topBg from "../img/top-gb.JPG"
 import exampleImg from "../img/example.png"
 import { Link } from "react-router-dom";
 import './Top.scss'
