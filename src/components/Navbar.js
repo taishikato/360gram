@@ -38,10 +38,22 @@ export default class Navbar extends React.Component {
 
           <div id="navbarBasicExample" className="navbar-menu">
             <div className="navbar-end">
-              <div className="navbar-item">
-                <Link to="/user/takato">
+              <div className="navbar-item has-dropdown is-hoverable">
+                <a className="navbar-link is-arrowless">
                   <img src={profile} className="is-rounded" width="32" />
-                </Link>
+                </a>
+                <div class="navbar-dropdown">
+                  <Link to="/user/takato" className="navbar-item">
+                    Profile
+                  </Link>
+                  <Link to="/settings" className="navbar-item">
+                    Settings
+                  </Link>
+                  <hr class="navbar-divider"></hr>
+                  <a class="navbar-item">
+                    Logout
+                  </a>
+                </div>
               </div>
               <div className="navbar-item">
                 <a

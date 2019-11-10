@@ -6,6 +6,7 @@ import 'firebase/firestore'
 import Top from './top/Top'
 import Profile from './profile/Profile'
 import Photo from './photo/Photo'
+import settings from './settings/Settings'
 import './assets/Bulma.scss';
 import './App.scss';
 import firebase from './plugins/firebase'
@@ -30,6 +31,7 @@ export default class App extends React.Component {
               <Route exact path="/" component={Top} />
               <Route path="/user/:id" component={Profile} />
               <Route path="/photo/:id" component={Photo} />
+              <Route path="/settings" component={settings} />
             </div>
           </ScrollToTop>
         </Router>
