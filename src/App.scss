@@ -1,7 +1,23 @@
+.is-simple.button {
+    background-color: black;
+    font-weight: 800;
+    color: white;
+    border: none;
+    &:hover {
+        border: none;
+    }
+}
+
 .is-simple.button.is-outlined {
     background-color: white;
     border: 2px solid #000000;
     font-weight: 800;
+    color: black;
+}
+
+#sign-up-button-top {
+    padding-left: calc(2em + 0.25em);
+    padding-right: calc(2em + 0.25em);
 }
 
 img.is-rounded {
@@ -10,4 +26,32 @@ img.is-rounded {
 
 .weight900 {
     font-weight: 900 !important;
+}
+
+.weight800 {
+    font-weight: 800 !important;
+}
+
+.is-devider {
+    display: block;
+    position: relative;
+    border-top: 1px solid #dbdbdb;
+    height: 1px;
+    margin: 2rem 0;
+    text-align: center;
+}
+
+.flex {
+    display: flex;
+}
+
+.flex-center {
+    align-items: center;
+}
+.flex-j-center {
+    justify-content: center;
+}
+
+.flex-j-space {
+    justify-content: space-between;
 }

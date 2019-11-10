@@ -1,4 +1,5 @@
 import React from 'react'
+import './Profile.scss'
 
 export default class Profile extends React.Component {
   render() {
@@ -7,7 +8,7 @@ export default class Profile extends React.Component {
         <div className="hero">
           <div className="hero-body has-text-centered">
             <div className="container">
-              <figure className="image is-96x96 is-rounded">
+              <figure id="profile-img" className="image is-96x96">
                 <img className="is-rounded" src="https://bulma.io/images/placeholders/96x96.png" alt="" />
               </figure>
               <h1 className="title">

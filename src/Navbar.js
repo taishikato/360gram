@@ -10,11 +10,11 @@ export default class Navbar extends React.Component {
 
   render() {
     return (
-      <nav className="navbar has-shadow" role="navigation" aria-label="main navigation">
-        <div className="container">
+      <nav className="navbar has-shadow is-fixed-top" role="navigation" aria-label="main navigation">
+        < div className="container" >
           <div className="navbar-brand">
             <Link to="/" className="navbar-item">
-              <img src={logo} alt="360gram" />
+              <img src={logo} alt="360gram" width="112" />
             </Link>
 
             <a role="button" className="navbar-burger" aria-label="menu" aria-expanded="false">
@@ -38,8 +38,8 @@ export default class Navbar extends React.Component {
               </div>
             </div>
           </div>
-        </div>
-      </nav>
+        </div >
+      </nav >
     )
   }
 }

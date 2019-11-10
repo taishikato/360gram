@@ -1,0 +1,24 @@
+#photo-tools {
+    padding: 20px 0;
+    .icon:not(:first-child) {
+        margin-left: 20px;
+    }
+}
+
+.image.is-32x32 {
+    img {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+#comment-title {
+    margin-bottom: 10px;
+}
+
+.comment-list {
+    margin-bottom: 10px;
+    .right-body {
+        margin-left: 20px;
+    }
+}
