@@ -1,5 +1,7 @@
 import React from 'react'
 import './Profile.scss'
+import { Link } from "react-router-dom"
+import exampleImg from "../img/example.png"
 
 export default class Profile extends React.Component {
   render() {
@@ -18,6 +20,24 @@ export default class Profile extends React.Component {
                 Hi I am a traveler
               </h2>
             </div>
+          </div>
+        </div>
+        <div className="is-devider"></div>
+        <div className="columns section is-multiline">
+          <div className="column is-4">
+            <Link to="/photo/tennis-girl">
+              <img src={exampleImg} />
+            </Link>
+          </div>
+          <div className="column is-4">
+            <Link to="/photo/tennis-girl">
+              <img src={exampleImg} />
+            </Link>
+          </div>
+          <div className="column is-4">
+            <Link to="/photo/tennis-girl">
+              <img src={exampleImg} />
+            </Link>
           </div>
         </div>
       </div>
