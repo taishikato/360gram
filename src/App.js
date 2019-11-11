@@ -9,6 +9,7 @@ import Photo from './photo/Photo'
 import settings from './settings/Settings'
 import './App.scss';
 import firebase from './plugins/firebase'
+import getRedirectResult from './plugins/getRedirectResult'
 import auth from './plugins/auth'
 
 const firestore = firebase.firestore()
@@ -16,8 +17,11 @@ const firestore = firebase.firestore()
 export default class App extends React.Component {
   componentDidMount = async () => {
     console.log('componentDidMount')
-    const authResult = await auth()
-    console.log({ authResult })
+    const authUser = await auth()
+    if (authUser === false) return
+    console.log({ authUser })
+    const redirectResult = await getRedirectResult()
+    console.log({ redirectResult })
   }
 
   render() {

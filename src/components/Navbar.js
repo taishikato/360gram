@@ -11,9 +11,7 @@ export default class Navbar extends React.Component {
   }
 
   handleOpenModal = () => {
-    console.log('handleOpenModal')
     this.setState({ showModal: true })
-    console.log(this.state.showModal)
   }
 
   handleCloseModal = () => {
@@ -70,6 +68,7 @@ export default class Navbar extends React.Component {
         <Modal
           isOpen={this.state.showModal}
           onRequestClose={this.handleCloseModal}
+          ariaHideApp={false}
           style={{
             overlay: {
               zIndex: 100000,

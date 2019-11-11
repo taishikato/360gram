@@ -1,9 +1,23 @@
 import React from 'react';
 import exampleImg from "../img/example.png"
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"
+import LoginModal from '../components/LoginModal'
+import Modal from 'react-modal'
 import './Top.scss'
 
 export default class Top extends React.Component {
+  state = {
+    showModal: false
+  }
+
+  handleOpenModal = () => {
+    this.setState({ showModal: true })
+  }
+
+  handleCloseModal = () => {
+    this.setState({ showModal: false })
+  }
+
   render() {
     return (
       <div>
@@ -19,7 +33,11 @@ export default class Top extends React.Component {
                 360 photos from all over the world.
               </h2>
               <div>
-                <a id="sign-up-button-top" className="button is-simple is-outlined is-rounded is-large">
+                <a
+                  id="sign-up-button-top"
+                  className="button is-simple is-outlined is-rounded is-large"
+                  onClick={this.handleOpenModal}
+                >
                   Sign Up
                 </a>
               </div>
@@ -55,6 +73,29 @@ export default class Top extends React.Component {
             </div>
           </div>
         </div>
+        <Modal
+          isOpen={this.state.showModal}
+          onRequestClose={this.handleCloseModal}
+          ariaHideApp={false}
+          style={{
+            overlay: {
+              zIndex: 100000,
+              backgroundColor: 'rgba(0, 0, 0, 0.7)'
+            },
+            content: {
+              width: '600px',
+              maxWidth: '100%',
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translateY(-50%)translateX(-50%)',
+              border: 'none',
+              backgroundColor: 'transparent'
+            }
+          }}
+        >
+          <LoginModal />
+        </Modal>
       </div>
     )
   }
