@@ -42,15 +42,15 @@ export default class Navbar extends React.Component {
                 <a className="navbar-link is-arrowless">
                   <img src={profile} className="is-rounded" width="32" />
                 </a>
-                <div class="navbar-dropdown">
+                <div className="navbar-dropdown">
                   <Link to="/user/takato" className="navbar-item">
                     Profile
                   </Link>
                   <Link to="/settings" className="navbar-item">
                     Settings
                   </Link>
-                  <hr class="navbar-divider"></hr>
-                  <a class="navbar-item">
+                  <hr className="navbar-divider"></hr>
+                  <a className="navbar-item">
                     Logout
                   </a>
                 </div>

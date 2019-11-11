@@ -1,7 +1,9 @@
 #photo-tools {
     padding: 20px 0;
-    .icon:not(:first-child) {
-        margin-left: 20px;
+    .photo-tools-item {
+        &:not(:first-child) {
+            margin-left: 20px;
+        }
     }
 }
 

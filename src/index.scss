@@ -1,0 +1,14 @@
+.marginAuto {
+    margin: 0 auto;
+}
+
+.whiteBg {
+    background-color: white;
+}
+
+a {
+    color: hsl(0, 0%, 29%);
+    &:hover {
+        color: hsl(217, 71%, 53%);
+    }
+}

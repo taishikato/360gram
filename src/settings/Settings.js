@@ -32,7 +32,7 @@ export default class Settings extends React.Component {
               <div className="field">
                 <label className="label">Bio</label>
                 <div className="control">
-                  <textarea class="textarea" placeholder="e.g. Hello world"></textarea>
+                  <textarea className="textarea" placeholder="e.g. Hello world"></textarea>
                 </div>
               </div>
               <div className="field">

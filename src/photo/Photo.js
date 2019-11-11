@@ -1,13 +1,28 @@
-import React from 'react';
-import './Photo.scss'
+import React from 'react'
+import Modal from 'react-modal'
+import PhotoShareModal from '../components/PhotoShareModal'
 import { Pannellum } from "pannellum-react";
 import myImage from "../img/360.JPG";
 import woq from "../img/woq.jpg"
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart, faShareSquare } from '@fortawesome/free-regular-svg-icons'
+import { faEllipsisH } from '@fortawesome/free-solid-svg-icons'
+import './Photo.scss'
 
 export default class Profile extends React.Component {
+  state = {
+    isOpenPhotoMenuModal: false
+  }
+
+  handleCloseModal = () => {
+    this.setState({ isOpenPhotoMenuModal: false })
+  }
+
+  handleOpenPhotoShareModal = () => {
+    this.setState({ isOpenPhotoMenuModal: true })
+  }
+
   render() {
     return (
       <div id="photo-page">
@@ -28,12 +43,21 @@ export default class Profile extends React.Component {
 
         <div className="column is-10 container">
           <div id="photo-tools" className="flex">
-            <span className="icon is-medium">
-              <FontAwesomeIcon icon={faHeart} size="lg" />
-            </span>
-            <span className="icon is-medium">
-              <FontAwesomeIcon icon={faShareSquare} size="lg" />
-            </span>
+            <a className="photo-tools-item">
+              <span className="icon is-medium">
+                <FontAwesomeIcon icon={faHeart} size="lg" />
+              </span>
+            </a>
+            <a className="photo-tools-item" onClick={this.handleOpenPhotoShareModal}>
+              <span className="icon is-medium">
+                <FontAwesomeIcon icon={faShareSquare} size="lg" />
+              </span>
+            </a>
+            {/* <a className="photo-tools-item">
+              <span className="icon is-medium">
+                <FontAwesomeIcon icon={faEllipsisH} size="lg" />
+              </span>
+            </a> */}
           </div>
           <div className="columns is-variable is-8">
             <div className="column is-6">
@@ -47,7 +71,9 @@ export default class Profile extends React.Component {
                   </p>
                 </div>
                 <figure className="image is-64x64">
-                  <img className="is-rounded" src="https://bulma.io/images/placeholders/64x64.png" alt="" />
+                  <Link to="/user/takato">
+                    <img className="is-rounded" src="https://bulma.io/images/placeholders/64x64.png" alt="" />
+                  </Link>
                 </figure>
               </div>
               <div className="is-devider"></div>
@@ -83,6 +109,29 @@ export default class Profile extends React.Component {
             </div>
           </div>
         </div>
+        <Modal
+          isOpen={this.state.isOpenPhotoMenuModal}
+          onRequestClose={this.handleCloseModal}
+          className="menu"
+          style={{
+            overlay: {
+              zIndex: 100000,
+              backgroundColor: 'rgba(0, 0, 0, 0.7)'
+            },
+            content: {
+              width: '300px',
+              maxWidth: '100%',
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translateY(-50%)translateX(-50%)',
+              backgroundColor: '#ffffff',
+              borderRadius: '3px'
+            }
+          }}
+        >
+          <PhotoShareModal />
+        </Modal>
       </div>
     )
   }

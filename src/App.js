@@ -7,7 +7,6 @@ import Top from './top/Top'
 import Profile from './profile/Profile'
 import Photo from './photo/Photo'
 import settings from './settings/Settings'
-import './assets/Bulma.scss';
 import './App.scss';
 import firebase from './plugins/firebase'
 import auth from './plugins/auth'
