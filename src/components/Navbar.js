@@ -19,6 +19,7 @@ export default class Navbar extends React.Component {
   }
 
   render() {
+    const { isLogin } = this.props
     return (
       <nav className="navbar has-shadow is-fixed-top" role="navigation" aria-label="main navigation">
         < div className="container" >
@@ -36,31 +37,35 @@ export default class Navbar extends React.Component {
 
           <div id="navbarBasicExample" className="navbar-menu">
             <div className="navbar-end">
-              <div className="navbar-item has-dropdown is-hoverable">
-                <a className="navbar-link is-arrowless">
-                  <img src={profile} className="is-rounded" width="32" />
-                </a>
-                <div className="navbar-dropdown">
-                  <Link to="/user/takato" className="navbar-item">
-                    Profile
-                  </Link>
-                  <Link to="/settings" className="navbar-item">
-                    Settings
-                  </Link>
-                  <hr className="navbar-divider"></hr>
-                  <a className="navbar-item">
-                    Logout
+              {isLogin ? (
+                <div className="navbar-item has-dropdown is-hoverable">
+                  <a className="navbar-link is-arrowless">
+                    <img src={profile} className="is-rounded" width="32" />
                   </a>
+                  <div className="navbar-dropdown">
+                    <Link to="/user/takato" className="navbar-item">
+                      Profile
+                    </Link>
+                    <Link to="/settings" className="navbar-item">
+                      Settings
+                    </Link>
+                    <hr className="navbar-divider"></hr>
+                    <a className="navbar-item">
+                      Logout
+                    </a>
+                  </div>
                 </div>
-              </div>
-              <div className="navbar-item">
-                <a
-                  className="button is-simple is-outlined is-rounded"
-                  onClick={this.handleOpenModal}
-                >
-                  Log in
-                </a>
-              </div>
+              ) : (
+                  <div className="navbar-item">
+                    <a
+                      className="button is-simple is-outlined is-rounded"
+                      onClick={this.handleOpenModal}
+                    >
+                      Log in
+                  </a>
+                  </div>
+                )
+              }
             </div>
           </div>
         </div >
