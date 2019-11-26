@@ -1,6 +1,7 @@
 import { connect } from 'react-redux'
 import Navbar from '../components/Navbar'
 import { logoutUser } from '../actions'
+import firebase from '../plugins/firebase'
 
 const mapStateToProps = state => {
   return {
@@ -11,7 +12,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    logoutUser: dispatch(logoutUser())
+    logoutUser: async () => {
+      await firebase.auth().signOut()
+      dispatch(logoutUser())
+    }
   }
 }
 

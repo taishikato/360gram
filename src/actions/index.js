@@ -3,8 +3,9 @@ export const LOGOUT = 'logout'
 
 export const loginUser = user => ({
   type: LOGIN,
-  name: user.displayName,
-  uid: user.uid
+  name: user.name,
+  uid: user.uid,
+  picture: user.picture
 })
 export const logoutUser = () => ({
   type: LOGOUT

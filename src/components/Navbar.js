@@ -1,5 +1,4 @@
 import React from 'react';
-import profile from '../img/profile.svg'
 import { Link } from "react-router-dom";
 import logo from '../img/logo.png'
 import Modal from 'react-modal'
@@ -19,7 +18,7 @@ export default class Navbar extends React.Component {
   }
 
   render() {
-    const { isLogin } = this.props
+    const { isLogin, loginUser, logoutUser } = this.props
     return (
       <nav className="navbar has-shadow is-fixed-top" role="navigation" aria-label="main navigation">
         < div className="container" >
@@ -40,7 +39,7 @@ export default class Navbar extends React.Component {
               {isLogin ? (
                 <div className="navbar-item has-dropdown is-hoverable">
                   <a className="navbar-link is-arrowless">
-                    <img src={profile} className="is-rounded" width="32" />
+                    <img src={loginUser.picture} className="is-rounded" width="32" />
                   </a>
                   <div className="navbar-dropdown">
                     <Link to="/user/takato" className="navbar-item">
@@ -50,7 +49,7 @@ export default class Navbar extends React.Component {
                       Settings
                     </Link>
                     <hr className="navbar-divider"></hr>
-                    <a className="navbar-item">
+                    <a className="navbar-item" onClick={logoutUser}>
                       Logout
                     </a>
                   </div>

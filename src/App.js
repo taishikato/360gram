@@ -10,23 +10,55 @@ import Photo from './photo/Photo'
 import settings from './settings/Settings'
 import './App.scss';
 import firebase from './plugins/firebase'
+import 'firebase/firestore'
 import getRedirectResult from './plugins/getRedirectResult'
 import auth from './plugins/auth'
 import { connect } from 'react-redux'
 import { loginUser } from './actions';
+import getUnixTime from './plugins/getUnixTime'
+
+const db = firebase.firestore()
 
 class App extends React.Component {
   componentDidMount = async () => {
-    console.log('componentDidMount')
     const authUser = await auth()
     if (authUser === false) return
-    console.log({ authUser })
-    this.props.loginUser(authUser)
-    const redirectResult = await getRedirectResult()
-    console.log({ redirectResult })
-    console.log('state確認')
-    console.log(this.props.isLogin)
-    console.log(this.props.loginUserInfo)
+    const result = await getRedirectResult()
+    if (result.user !== null) {
+      if (result.additionalUserInfo.isNewUser) {
+        const created = getUnixTime()
+        // Sign Up
+        console.log('新規ユーザー')
+        // ユーザー保存
+        const userData = result.user
+        const userUid = userData.uid
+        const newPublicUserData = {
+          uid: userUid,
+          name: userData.displayName,
+          picture: userData.photoURL.replace('_normal', ''),
+          created
+        }
+        await db
+          .collection('users')
+          .doc(userUid)
+          .set(newPublicUserData)
+        this.props.loginUser(newPublicUserData)
+      } else {
+        console.log('既存ユーザーログイン')
+        const user = await db
+          .collection('users')
+          .doc(authUser.uid)
+          .get()
+        this.props.loginUser(user.data())
+      }
+      return
+    }
+    // 通常アクセス
+    const user = await db
+      .collection('users')
+      .doc(authUser.uid)
+      .get()
+    this.props.loginUser(user.data())
   }
 
   render() {

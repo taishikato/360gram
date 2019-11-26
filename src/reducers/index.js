@@ -6,7 +6,8 @@ const loginUser = (state = {}, action) => {
     case LOGIN:
       return {
         uid: action.uid,
-        name: action.name
+        name: action.name,
+        picture: action.picture
       }
     default:
       return state
