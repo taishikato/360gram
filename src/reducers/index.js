@@ -7,7 +7,9 @@ const loginUser = (state = {}, action) => {
       return {
         uid: action.uid,
         name: action.name,
-        picture: action.picture
+        picture: action.picture,
+        username: action.username,
+        bio: action.bio
       }
     default:
       return state

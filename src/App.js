@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 // import Navbar from './components/Navbar'
 import LoggedinNavbar from './container/LoggedinNavbar'
 import ScrollToTop from './components/ScrollToTop'
-import 'firebase/firestore'
 import Top from './top/Top'
 import Profile from './profile/Profile'
 import Photo from './photo/Photo'
@@ -16,6 +15,7 @@ import auth from './plugins/auth'
 import { connect } from 'react-redux'
 import { loginUser } from './actions';
 import getUnixTime from './plugins/getUnixTime'
+import uuid from 'uuid/v4'
 
 const db = firebase.firestore()
 
@@ -36,7 +36,8 @@ class App extends React.Component {
           uid: userUid,
           name: userData.displayName,
           picture: userData.photoURL.replace('_normal', ''),
-          created
+          created,
+          username: uuid().split('-').join('')
         }
         await db
           .collection('users')
@@ -69,7 +70,7 @@ class App extends React.Component {
             <LoggedinNavbar />
             <div>
               <Route exact path="/" component={Top} />
-              <Route path="/user/:id" component={Profile} />
+              <Route path="/user/:username" component={Profile} />
               <Route path="/photo/:id" component={Photo} />
               <Route path="/settings" component={settings} />
             </div>

@@ -2,9 +2,29 @@ import React from 'react'
 import './Profile.scss'
 import { Link } from "react-router-dom"
 import exampleImg from "../img/example.png"
+import firebase from '../plugins/firebase'
+import 'firebase/firestore'
+
+const db = firebase.firestore()
 
 export default class Profile extends React.Component {
+
+  state = {
+    user: {}
+  }
+
+  componentDidMount = async () => {
+    const userData = await db
+      .collection('users')
+      .where('username', '==', this.props.match.params.username)
+      .get()
+    this.setState({
+      user: userData.docs[0].data()
+    })
+  }
+
   render() {
+    const { user } = this.state
     return (
       <div className="whiteBg">
         <div className="container">
@@ -12,13 +32,13 @@ export default class Profile extends React.Component {
             <div className="hero-body has-text-centered">
               <div className="container">
                 <figure id="profile-img" className="image is-96x96">
-                  <img className="is-rounded" src="https://bulma.io/images/placeholders/96x96.png" alt="" />
+                  <img className="is-rounded" src={user.picture} alt="" />
                 </figure>
                 <h1 className="title">
-                  Taishi Kato
+                  {user.name}
                 </h1>
                 <h2 className="subtitle">
-                  Hi I am a traveler
+                  {user.bio || 'No bio yet'}
                 </h2>
               </div>
             </div>
