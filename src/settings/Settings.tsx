@@ -19,6 +19,7 @@ class Settings extends React.Component<PropsInteface> {
   state = {
     imageData: '',
     bio: '',
+    username: '',
     isUpdating: false,
     blob: null
   }
@@ -27,12 +28,17 @@ class Settings extends React.Component<PropsInteface> {
     const { loginUser } = this.props
     this.setState({
       imageData: loginUser.picture,
-      bio: loginUser.bio
+      bio: loginUser.bio,
+      username: loginUser.username
     })
   }
 
   handleChange = (e: React.FormEvent<HTMLTextAreaElement>) => {
     this.setState({ bio: e.currentTarget.value })
+  }
+
+  handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ username: e.target.value })
   }
 
   update = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -42,7 +48,8 @@ class Settings extends React.Component<PropsInteface> {
     try {
       const updateItems: {
         picture?: string,
-        bio? : string
+        bio? : string,
+        username?: string
       } = {}
       let picture = ''
       if (this.blob !== null) {
@@ -52,6 +59,21 @@ class Settings extends React.Component<PropsInteface> {
 
       updateItems.bio = this.state.bio
 
+      // check username
+      const usernameUserData = await db
+        .collection('users')
+        .where('username', '==', this.state.username)
+        .get()
+      if (usernameUserData.size > 0) {
+        const user = usernameUserData.docs[0].data()
+        if (user.uid !== loginUser.uid) {
+          console.warn('This username is already taken')
+          return
+        }
+      }
+
+      updateItems.username = this.state.username
+
       await db
         .collection('users')
         .doc(loginUser.uid)
@@ -59,6 +81,8 @@ class Settings extends React.Component<PropsInteface> {
       if (this.blob !== null) {
         loginUser.picture = picture
       }
+      loginUser.username = updateItems.username
+      console.log(loginUser)
       updateUser(loginUser)
     } catch (err) {
       console.error(err)
@@ -70,7 +94,6 @@ class Settings extends React.Component<PropsInteface> {
   onFileChange = (e: any) => {
     console.table(e.target.files)
     this.setState({ imageData: '' })
-    // const files = e.target.files
     // blob形式に変換
     this.blob = new Blob(e.target.files, { type: 'image/png' })
     if (e.target.files.length > 0) {
@@ -128,6 +151,12 @@ class Settings extends React.Component<PropsInteface> {
                 </label>
               </div>
               <div className="field">
+                <label className="label">Username</label>
+                <div className="control">
+                  <input type="text" className="input" value={this.state.username} onChange={this.handleUsernameChange} />
+                </div>
+              </div>
+              <div className="field">
                 <label className="label">Bio</label>
                 <div className="control">
                   <textarea value={this.state.bio} className="textarea" placeholder="e.g. Hello world" onChange={this.handleChange}></textarea>
@@ -169,10 +198,6 @@ export default connect(
   mapStateToProps,
   mapDispacthToProps
 )(Settings)
-
-interface HTMLInputEvent extends Event {
-  target: HTMLInputElement & EventTarget
-}
 
 interface PropsInteface {
   loginUser: UserInterface,
