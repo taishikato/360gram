@@ -1,6 +1,6 @@
 import firebase from './firebase'
 
-export default () => {
+export default (): any => {
   return new Promise((resolve, reject) => {
     firebase
       .auth()

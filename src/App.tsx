@@ -16,10 +16,15 @@ import { connect } from 'react-redux'
 import { loginUser } from './actions';
 import getUnixTime from './plugins/getUnixTime'
 import uuid from 'uuid/v4'
+import { Dispatch } from 'redux'
+import { StateInterface, UserInterface } from './reducers'
 
 const db = firebase.firestore()
 
-class App extends React.Component {
+class App extends React.Component<PropsInterface> {
+  constructor(props: PropsInterface) {
+    super(props)
+  }
   componentDidMount = async () => {
     const authUser = await auth()
     if (authUser === false) return
@@ -32,7 +37,7 @@ class App extends React.Component {
         // ユーザー保存
         const userData = result.user
         const userUid = userData.uid
-        const newPublicUserData = {
+        const newPublicUserData: UserInterface = {
           uid: userUid,
           name: userData.displayName,
           picture: userData.photoURL.replace('_normal', ''),
@@ -50,7 +55,7 @@ class App extends React.Component {
           .collection('users')
           .doc(authUser.uid)
           .get()
-        this.props.loginUser(user.data())
+        this.props.loginUser(user.data() as UserInterface)
       }
       return
     }
@@ -59,7 +64,7 @@ class App extends React.Component {
       .collection('users')
       .doc(authUser.uid)
       .get()
-    this.props.loginUser(user.data())
+    this.props.loginUser(user.data() as UserInterface)
   }
 
   render() {
@@ -81,19 +86,25 @@ class App extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state: StateInterface) => {
   return {
     isLogin: state.isLogin,
     loginUserInfo: state.loginUser
   }
 }
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    loginUser: user => {
+    loginUser: (user: UserInterface): void => {
       dispatch(loginUser(user))
     }
   }
+}
+
+interface PropsInterface {
+  loginUserInfo: UserInterface,
+  isLogin: Boolean,
+  loginUser: (user: UserInterface)=> void
 }
 
 export default connect(

@@ -1,7 +1,8 @@
+import { UserInterface } from '../reducers'
 export const LOGIN = 'login'
 export const LOGOUT = 'logout'
 
-export const loginUser = user => ({
+export const loginUser = (user: UserInterface) => ({
   type: LOGIN,
   name: user.name,
   uid: user.uid,

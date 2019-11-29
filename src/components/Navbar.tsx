@@ -5,8 +5,9 @@ import Modal from 'react-modal'
 import LoginModal from './LoginModal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import { PropsInterface } from '../container/LoggedinNavbar'
 
-export default class Navbar extends React.Component {
+export default class Navbar extends React.Component<PropsInterface> {
   state = {
     showModal: false,
     showPostModal: false

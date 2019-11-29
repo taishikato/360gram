@@ -6,15 +6,15 @@ import { connect } from 'react-redux'
 import { loginUser } from '../actions'
 import firebase from '../plugins/firebase'
 import 'firebase/firestore'
+import { UserInterface } from '../reducers'
+import { Dispatch } from 'redux'
 
 const db = firebase.firestore()
 
-class Settings extends React.Component {
+class Settings extends React.Component<PropsInteface> {
 
-  constructor(props) {
-    super(props)
-    this.blob = null
-  }
+  blob: Blob | null = null
+  downloadURL: string = ''
 
   state = {
     imageData: '',
@@ -31,16 +31,19 @@ class Settings extends React.Component {
     })
   }
 
-  handleChange = (e) => {
-    this.setState({ bio: e.target.value })
+  handleChange = (e: React.FormEvent<HTMLTextAreaElement>) => {
+    this.setState({ bio: e.currentTarget.value })
   }
 
-  update = async (e) => {
+  update = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     this.setState({ isUpdating: true })
     const { loginUser, updateUser } = this.props
     try {
-      const updateItems = {}
+      const updateItems: {
+        picture?: string,
+        bio? : string
+      } = {}
       let picture = ''
       if (this.blob !== null) {
         picture = await this.upload(loginUser.uid)
@@ -57,54 +60,31 @@ class Settings extends React.Component {
         loginUser.picture = picture
       }
       updateUser(loginUser)
-      this.setState({ isUpdating: false })
-      // const userRef = firestore
-      //   .collection('publicUsers')
-      //   .doc(this.$store.getters.getUserInfo.uid)
-      // const userSecretRef = firestore
-      //   .collection('secretUsers')
-      //   .doc(this.$store.getters.getUserInfo.uid)
-      // await Promise.all([
-      //   updateDoc(userRef, this.userSettings),
-      //   updateDoc(userSecretRef, this.userSecretSettings)
-      // ])
-      // this.$snackbar.open({
-      //   message: 'Successfuly saved',
-      //   type: 'is-success',
-      //   position: 'is-top',
-      //   duration: 3000
-      // })
     } catch (err) {
       console.error(err)
-      // this.$snackbar.open({
-      //   message: 'Something went wrong...Please try again',
-      //   type: 'is-danger',
-      //   position: 'is-top',
-      //   duration: 4000
-      // })
     } finally {
-      this.isLoading = false
+      this.setState({ isUpdating: false })
     }
   }
 
-  onFileChange = (e) => {
+  onFileChange = (e: any) => {
     console.table(e.target.files)
-    this.imageData = ''
-    const files = e.target.files
+    this.setState({ imageData: '' })
+    // const files = e.target.files
     // blob形式に変換
-    this.blob = new Blob(files, { type: 'image/png' })
-    if (files.length > 0) {
-      const file = files[0]
+    this.blob = new Blob(e.target.files, { type: 'image/png' })
+    if (e.target.files.length > 0) {
+      const file = e.target.files[0]
       const reader = new FileReader()
       reader.onload = (e) => {
-        this.setState({ imageData: e.target.result })
+        this.setState({ imageData: e.target!.result })
       }
       reader.readAsDataURL(file)
     }
   }
 
-  upload = async (id) => {
-    const updateDataConst = {}
+  upload = async (id: string) => {
+    const updateDataConst: { picture?: '' } = {}
     // 画像処理
     if (this.blob !== null) {
       const storageRef = firebase.storage().ref()
@@ -161,7 +141,6 @@ class Settings extends React.Component {
                     ) : (
                       <input type="submit" className="button is-link is-rounded" value="Save changes" />
                     )}
-                  {/* <input type="submit" className={this.state.isUpdating ? 'button is-link is-rounded is-loading' : 'button is-link is-rounded'} value="Save changes" /> */}
                 </div>
               </div>
             </div>
@@ -172,15 +151,15 @@ class Settings extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state: StateInterface) => {
   return {
     loginUser: state.loginUser,
   }
 }
 
-const mapDispacthToProps = dispatch => {
+const mapDispacthToProps = (dispatch: Dispatch) => {
   return {
-    updateUser: (loginUserData) => {
+    updateUser: (loginUserData: UserInterface): void => {
       dispatch(loginUser(loginUserData))
     }
   }
@@ -190,3 +169,16 @@ export default connect(
   mapStateToProps,
   mapDispacthToProps
 )(Settings)
+
+interface HTMLInputEvent extends Event {
+  target: HTMLInputElement & EventTarget
+}
+
+interface PropsInteface {
+  loginUser: UserInterface,
+  updateUser: (loginUserData: UserInterface) => void
+}
+
+interface StateInterface {
+  loginUser: UserInterface
+}

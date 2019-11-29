@@ -4,22 +4,30 @@ import { Link } from "react-router-dom"
 import exampleImg from "../img/example.png"
 import firebase from '../plugins/firebase'
 import 'firebase/firestore'
+import { RouteComponentProps } from 'react-router-dom'
+import { UserInterface } from '../reducers'
 
 const db = firebase.firestore()
 
-export default class Profile extends React.Component {
+export default class Profile extends React.Component<RouteComponentProps> {
 
-  state = {
-    user: {}
+  state: StateInterface = {
+    user: {
+      name: '',
+      uid: '',
+      picture: '',
+      username: ''
+    }
   }
 
   componentDidMount = async () => {
+    const params: PropsInterface = this.props.match.params as PropsInterface
     const userData = await db
       .collection('users')
-      .where('username', '==', this.props.match.params.username)
+      .where('username', '==', params.username)
       .get()
     this.setState({
-      user: userData.docs[0].data()
+      user: userData.docs[0].data() as StateInterface
     })
   }
 
@@ -65,4 +73,12 @@ export default class Profile extends React.Component {
       </div>
     )
   }
+}
+
+interface PropsInterface {
+  username: string
+}
+
+interface StateInterface {
+  user: UserInterface
 }

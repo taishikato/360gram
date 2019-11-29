@@ -2,7 +2,7 @@ import React from 'react'
 import Modal from 'react-modal'
 import PhotoShareModal from '../components/PhotoShareModal'
 import { Pannellum } from "pannellum-react";
-import myImage from "../img/360.JPG";
+import myImage from '../img/360.jpg';
 import woq from "../img/woq.jpg"
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
