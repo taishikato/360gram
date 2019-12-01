@@ -82,7 +82,6 @@ class Settings extends React.Component<PropsInteface> {
         loginUser.picture = picture
       }
       loginUser.username = updateItems.username
-      console.log(loginUser)
       updateUser(loginUser)
     } catch (err) {
       console.error(err)

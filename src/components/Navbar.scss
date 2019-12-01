@@ -1,0 +1,9 @@
+#logo {
+    flex-grow: 1;
+}
+
+#upload-button {
+    &:hover {
+        background-color: #e8e8e8;
+    }
+}

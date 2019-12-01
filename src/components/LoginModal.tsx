@@ -8,7 +8,6 @@ const facebookProvider = new firebase.auth.FacebookAuthProvider()
 
 export default class LoginModal extends Component {
   googleLogin = () => {
-    console.log('googleLogin')
     firebase.auth().signInWithRedirect(googleProvider)
   }
   facebookLogin = () => {

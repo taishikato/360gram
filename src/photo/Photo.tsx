@@ -1,13 +1,12 @@
 import React from 'react'
 import Modal from 'react-modal'
 import PhotoShareModal from '../components/PhotoShareModal'
-import { Pannellum } from "pannellum-react";
-import myImage from '../img/360.jpg';
+import { Pannellum } from "pannellum-react"
+import myImage from '../img/360.jpg'
 import woq from "../img/woq.jpg"
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart, faShareSquare } from '@fortawesome/free-regular-svg-icons'
-// import { faEllipsisH } from '@fortawesome/free-solid-svg-icons'
 import './Photo.scss'
 
 export default class Profile extends React.Component {
@@ -32,7 +31,7 @@ export default class Profile extends React.Component {
           image={myImage}
           pitch={10}
           yaw={180}
-          hfov={300}
+          hfov={110}
           vaov={180}
           autoLoad
           onLoad={() => {
