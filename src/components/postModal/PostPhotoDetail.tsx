@@ -8,7 +8,7 @@ import 'firebase/firestore'
 import uuid from 'uuid/v4'
 import { StateInterface } from '../../reducers'
 import getUnixTime from '../../plugins/getUnixTime'
-import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { withRouter, RouteComponentProps } from 'react-router-dom'
 
 const db = firebase.firestore()
 
@@ -18,11 +18,11 @@ const cloudinary = {
   cloudName: cloudinaryConst.cloudName
 }
 
-// const PostPhotoDetail: React.FC<PropsInterface> = (props) => {
 class PostPhotoDetail extends React.Component<PropsInterface> {
 
   state = {
-    title: ''
+    title: '',
+    isSubmitting: false
   }
 
   uploadImage = () => {
@@ -48,6 +48,7 @@ class PostPhotoDetail extends React.Component<PropsInterface> {
 
   handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    this.setState({ isSubmitting: true })
     // Upload image and get public_id
     const { data } = await this.uploadImage()
     // Save data on db
@@ -63,19 +64,20 @@ class PostPhotoDetail extends React.Component<PropsInterface> {
         created: getUnixTime(),
         title: this.state.title
       })
+    this.setState({ isSubmitting: false })
     this.props.handleCloseModal()
     this.props.history.push(`/photo/${id}`);
   }
 
   render() {
-    const { title } = this.state
+    const { title, isSubmitting } = this.state
     return (
       <div className="columns">
         <div id="panorama-preview" className="column is-8">
           <Pannellum
             width="100%"
             height="500px"
-            image={this.props.imageData}
+            image={this.props.previewData}
             pitch={10}
             yaw={180}
             hfov={110}
@@ -110,11 +112,9 @@ class PostPhotoDetail extends React.Component<PropsInterface> {
 
           <div className="field">
             <div className="control submit-button">
-              {title !== '' ? (
-                <input type="submit" className="button is-success has-text-weight-bold" value="Submit" />
-              ) : (
-                <button className="button is-success has-text-weight-bold" disabled>Submit</button>
-              )}
+              {isSubmitting && <button className="button is-success is-loading">Submit</button> }
+              {title === '' && !isSubmitting && <button className="button is-success has-text-weight-bold" disabled>Submit</button> }
+              {title !== '' && !isSubmitting && <input type="submit" className="button is-success has-text-weight-bold" value="Submit" /> }
             </div>
           </div>
         </form>
@@ -127,6 +127,7 @@ export default withRouter(PostPhotoDetail)
 
 interface PropsInterface extends RouteComponentProps {
   imageData: string,
+  previewData: string,
   loginUser?: StateInterface['loginUser'],
   handleCloseModal: () => void
 }

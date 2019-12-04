@@ -12,6 +12,7 @@ import firebase from '../plugins/firebase'
 import 'firebase/firestore'
 import { cloudinary as cloudinaryConst } from '../Const'
 import cloudinary from 'cloudinary-core'
+import { isMobile } from 'react-device-detect'
 
 const cl = new cloudinary.Cloudinary({cloud_name: cloudinaryConst.cloudName, secure: true});
 const db = firebase.firestore()
@@ -38,7 +39,12 @@ export default class Profile extends React.Component<RouteComponentProps> {
     const postData = await db.collection('posts').doc(photoId).get()
     const post = postData.data()
     console.log(post)
-    const url = cl.url(post!.publicId)
+    let url: string
+    if (isMobile) {
+      url = cl.url(post!.publicId, { width: 2000, crop: 'scale'})
+    } else {
+      url = cl.url(post!.publicId)
+    }
     this.setState({
       photoUrl: url,
       post

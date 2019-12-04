@@ -4,6 +4,9 @@ import UploadForm from './UploadForm'
 import PostPhotoDetail from './PostPhotoDetail'
 import { connect } from 'react-redux'
 import { StateInterface } from '../../reducers'
+import { isMobile } from 'react-device-detect'
+import jimp from 'jimp'
+import { base64StringToBlob } from 'blob-util'
 
 class PostModal extends React.Component<PropsInterface> {
 
@@ -11,6 +14,7 @@ class PostModal extends React.Component<PropsInterface> {
 
   state = {
     imageData: '',
+    previewData: '',
     showPanorama: false
   }
 
@@ -24,9 +28,22 @@ class PostModal extends React.Component<PropsInterface> {
     if (e.target.files.length > 0) {
       const file = e.target.files[0]
       const reader = new FileReader()
-      reader.onload = (e) => {
+      reader.onload = async (e) => {
+        const img: any = new Image();
+        img.src = reader.result
+        const imgObj: any = { img }
+        let previewData = e.target!.result
+        // console.log(imgObj.img)
+        if (isMobile) {
+          console.log('iphone')
+          // リサイズ
+          const res = await jimp.read(e.target!.result as any)
+          const resized = await res.resize(3000, jimp.AUTO)
+          previewData = await resized.getBase64Async('image/jpeg')
+        }
         this.setState({
           imageData: e.target!.result,
+          previewData,
           showPanorama: true
         })
       }
@@ -35,13 +52,14 @@ class PostModal extends React.Component<PropsInterface> {
   }
 
   render() {
-    const { imageData, showPanorama } = this.state
+    const { imageData, previewData, showPanorama } = this.state
     const { loginUser, handleCloseModal } = this.props
     return (
       <div id="post-modal-wrapper">
         {showPanorama &&
           <PostPhotoDetail
             imageData={imageData}
+            previewData={previewData}
             loginUser={loginUser}
             handleCloseModal={handleCloseModal}
           />
