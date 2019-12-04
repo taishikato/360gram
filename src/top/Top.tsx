@@ -1,9 +1,10 @@
 import React from 'react';
-import exampleImg from "../img/example.png"
 import { Link } from "react-router-dom"
 import LoginModal from '../components/LoginModal'
 import Modal from 'react-modal'
 import './Top.scss'
+import { Image, Transformation } from 'cloudinary-react'
+import { cloudinary } from '../Const'
 
 export default class Top extends React.Component {
   state = {
@@ -56,20 +57,22 @@ export default class Top extends React.Component {
           </div>
 
           <div className="columns section is-multiline">
-            <div className="column is-4">
-              <Link to="/photo/tennis-girl">
-                <img src={exampleImg} />
+            <div className="column is-6">
+              <Link to={`/photo/fds`}>
+                <Image cloudName={cloudinary.cloudName} publicId="sbuabmte0jj7nxhxcuxz.jpg" >
+                  <Transformation width="1500" crop="pad" />
+                </Image>
               </Link>
             </div>
-            <div className="column is-4">
-              <Link to="/photo/tennis-girl">
-                <img src={exampleImg} />
-              </Link>
+            <div className="column is-6">
+              <Image cloudName={cloudinary.cloudName} publicId="sbuabmte0jj7nxhxcuxz.jpg" >
+                <Transformation width="1500" crop="pad" />
+              </Image>
             </div>
-            <div className="column is-4">
-              <Link to="/photo/tennis-girl">
-                <img src={exampleImg} />
-              </Link>
+            <div className="column is-6">
+              <Image cloudName={cloudinary.cloudName} publicId="sbuabmte0jj7nxhxcuxz.jpg" >
+                <Transformation width="1500" crop="pad" />
+              </Image>
             </div>
           </div>
         </div>

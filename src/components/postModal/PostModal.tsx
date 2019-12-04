@@ -2,8 +2,10 @@ import React from 'react'
 import './PostModal.scss'
 import UploadForm from './UploadForm'
 import PostPhotoDetail from './PostPhotoDetail'
+import { connect } from 'react-redux'
+import { StateInterface } from '../../reducers'
 
-class PostModal extends React.Component {
+class PostModal extends React.Component<PropsInterface> {
 
   blob: Blob | null = null
 
@@ -34,10 +36,15 @@ class PostModal extends React.Component {
 
   render() {
     const { imageData, showPanorama } = this.state
+    const { loginUser, handleCloseModal } = this.props
     return (
       <div id="post-modal-wrapper">
         {showPanorama &&
-          <PostPhotoDetail imageData={imageData} />
+          <PostPhotoDetail
+            imageData={imageData}
+            loginUser={loginUser}
+            handleCloseModal={handleCloseModal}
+          />
         }
         {!showPanorama &&
           <UploadForm onFileChange={this.onFileChange} />
@@ -47,4 +54,18 @@ class PostModal extends React.Component {
   }
 }
 
-export default PostModal
+const mapStateToProps = (state: StateInterface) => {
+  return {
+    loginUser: state.loginUser
+  }
+}
+
+interface PropsInterface {
+  loginUser?: StateInterface['loginUser'],
+  handleCloseModal: () => void
+}
+
+export default connect(
+  mapStateToProps,
+  null
+)(PostModal)

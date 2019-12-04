@@ -4,14 +4,24 @@ import PhotoShareModal from '../components/PhotoShareModal'
 import { Pannellum } from "pannellum-react"
 import myImage from '../img/360.jpg'
 import woq from "../img/woq.jpg"
-import { Link } from "react-router-dom"
+import { Link, RouteComponentProps } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart, faShareSquare } from '@fortawesome/free-regular-svg-icons'
 import './Photo.scss'
+import firebase from '../plugins/firebase'
+import 'firebase/firestore'
+import { cloudinary as cloudinaryConst } from '../Const'
+import cloudinary from 'cloudinary-core'
 
-export default class Profile extends React.Component {
-  state = {
-    isOpenPhotoMenuModal: false
+const cl = new cloudinary.Cloudinary({cloud_name: cloudinaryConst.cloudName, secure: true});
+const db = firebase.firestore()
+
+export default class Profile extends React.Component<RouteComponentProps> {
+  state: StateInterface = {
+    isOpenPhotoMenuModal: false,
+    post: {},
+    photoUrl: '',
+    user: {}
   }
 
   handleCloseModal = () => {
@@ -22,13 +32,33 @@ export default class Profile extends React.Component {
     this.setState({ isOpenPhotoMenuModal: true })
   }
 
+  componentDidMount = async () => {
+    const params = this.props.match.params as ParamsInterface
+    const photoId = params.id
+    const postData = await db.collection('posts').doc(photoId).get()
+    const post = postData.data()
+    console.log(post)
+    const url = cl.url(post!.publicId)
+    this.setState({
+      photoUrl: url,
+      post
+    })
+
+    const userData = await db.collection('users').doc(post!.userId).get()
+    this.setState({
+      user: userData.data()
+    })
+    // console.log(userData.data())
+  }
+
   render() {
+    const { post, photoUrl, user } = this.state
     return (
       <div id="photo-page">
         <Pannellum
           width="100%"
           height="500px"
-          image={myImage}
+          image={photoUrl}
           pitch={10}
           yaw={180}
           hfov={110}
@@ -63,15 +93,15 @@ export default class Profile extends React.Component {
               <div className="flex flex-center flex-j-space">
                 <div>
                   <p className="has-text-weight-semibold is-size-4">
-                    Luang Prabang Sunset
+                    {post.title}
                   </p>
                   <p>
-                    by <Link to="/user/takato">Taishi kato</Link>
+                    by <Link to="/user/takato">{user.name}</Link>
                   </p>
                 </div>
                 <figure className="image is-64x64">
                   <Link to="/user/takato">
-                    <img className="is-rounded" src="https://bulma.io/images/placeholders/64x64.png" alt="" />
+                    <img className="is-rounded" src={user.picture} alt="" />
                   </Link>
                 </figure>
               </div>
@@ -134,4 +164,15 @@ export default class Profile extends React.Component {
       </div>
     )
   }
+}
+
+interface ParamsInterface {
+  id: string
+}
+
+interface StateInterface {
+  isOpenPhotoMenuModal: boolean,
+  post: any,
+  photoUrl: string,
+  user: any
 }

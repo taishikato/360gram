@@ -161,7 +161,7 @@ export default class Navbar extends React.Component<PropsInterface> {
             }
           }}
         >
-          <PostModal />
+          <PostModal handleCloseModal={this.handleCloseModal} />
         </Modal>
       </nav >
     )
