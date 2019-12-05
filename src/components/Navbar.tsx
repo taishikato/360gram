@@ -47,14 +47,14 @@ export default class Navbar extends React.Component<PropsInterface> {
               <img src={logo} alt="360gram" width="112" />
             </Link>
 
-            {isLogin &&
+            {isLogin && !checkingAuth &&
               <a onClick={this.toggleBurger} role="button" className="navbar-burger" aria-label="menu" aria-expanded="false">
                 <span aria-hidden="true"></span>
                 <span aria-hidden="true"></span>
                 <span aria-hidden="true"></span>
               </a>
             }
-            {!isLogin &&
+            {!isLogin && !checkingAuth &&
               <div className="navbar-item is-hidden-desktop">
                 <a
                   className="button is-simple is-outlined is-rounded"
@@ -63,6 +63,16 @@ export default class Navbar extends React.Component<PropsInterface> {
                   Log in / Sign up
                 </a>
               </div>
+            }
+            {checkingAuth &&
+            <div className="navbar-item is-hidden-desktop">
+              <Loader
+                type="ThreeDots"
+                color="#000000"
+                height={40}
+                width={40}
+              />
+            </div>
             }
           </div>
 
