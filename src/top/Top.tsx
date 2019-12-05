@@ -5,8 +5,10 @@ import Modal from 'react-modal'
 import './Top.scss'
 import { Image, Transformation } from 'cloudinary-react'
 import { cloudinary } from '../Const'
+import { connect } from 'react-redux'
+import { StateInterface } from '../reducers'
 
-export default class Top extends React.Component {
+class Top extends React.Component<PropsInterface> {
   state = {
     showModal: false
   }
@@ -20,6 +22,7 @@ export default class Top extends React.Component {
   }
 
   render() {
+    const { isLogin } = this.props
     return (
       <div>
         <div id="hero-bg" className="hero is-fullheight">
@@ -33,15 +36,17 @@ export default class Top extends React.Component {
                 Get inspired and share stunning<br />
                 360 photos from all over the world.
               </h2>
-              <div>
-                <a
-                  id="sign-up-button-top"
-                  className="button is-simple is-outlined is-rounded is-large"
-                  onClick={this.handleOpenModal}
-                >
-                  Sign Up
-                </a>
-              </div>
+              {!isLogin &&
+                <div>
+                  <a
+                    id="sign-up-button-top"
+                    className="button is-simple is-outlined is-rounded is-large"
+                    onClick={this.handleOpenModal}
+                  >
+                    Sign Up
+                  </a>
+                </div>
+              }
             </div>
           </div>
         </div>
@@ -102,4 +107,19 @@ export default class Top extends React.Component {
       </div>
     )
   }
+}
+
+const mapStateToProps = (state: StateInterface) => {
+  return {
+    isLogin: state.isLogin
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  null
+)(Top)
+
+interface PropsInterface {
+  isLogin: StateInterface['isLogin']
 }
