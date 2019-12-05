@@ -22,6 +22,7 @@ class PostPhotoDetail extends React.Component<PropsInterface> {
 
   state = {
     title: '',
+    description: '',
     isSubmitting: false
   }
 
@@ -47,6 +48,10 @@ class PostPhotoDetail extends React.Component<PropsInterface> {
     this.setState({ title: e.target.value }) 
   }
 
+  handleDescriptionChange = (e: React.FormEvent<HTMLTextAreaElement>) => {
+    this.setState({ description: e.currentTarget.value }) 
+  }
+
   handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     this.setState({ isSubmitting: true })
@@ -63,7 +68,8 @@ class PostPhotoDetail extends React.Component<PropsInterface> {
         userId: loginUser!.uid,
         publicId: data['public_id'],
         created: getUnixTime(),
-        title: this.state.title
+        title: this.state.title,
+        description: this.state.description
       })
     this.setState({ isSubmitting: false })
     this.props.handleCloseModal()
@@ -71,7 +77,7 @@ class PostPhotoDetail extends React.Component<PropsInterface> {
   }
 
   render() {
-    const { title, isSubmitting } = this.state
+    const { title, description, isSubmitting } = this.state
     return (
       <div className="columns">
         <div id="panorama-preview" className="column is-8">
@@ -107,7 +113,7 @@ class PostPhotoDetail extends React.Component<PropsInterface> {
           <div className="field">
             <label className="label">Description</label>
             <div className="control">
-              <textarea className="textarea"></textarea>
+              <textarea value={description} className="textarea" onChange={this.handleDescriptionChange}></textarea>
             </div>
           </div>
 

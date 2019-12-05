@@ -118,6 +118,9 @@ export default class Profile extends React.Component<RouteComponentProps> {
                     {post.created}
                   </Moment>
                 </div>
+                <div id="description">
+                  {post.description}
+                </div>
               </div>
             </div>
             <div className="column is-6">
@@ -146,9 +149,6 @@ export default class Profile extends React.Component<RouteComponentProps> {
                   </div>
                 </li>
               </ul> */}
-              <div>
-                {post.description}
-              </div>
             </div>
           </div>
         </div>
