@@ -7,10 +7,15 @@ import { Image, Transformation } from 'cloudinary-react'
 import { cloudinary } from '../Const'
 import { connect } from 'react-redux'
 import { StateInterface } from '../reducers'
+import firebase from '../plugins/firebase'
+import 'firebase/firestore'
+
+const db = firebase.firestore()
 
 class Top extends React.Component<PropsInterface> {
   state = {
-    showModal: false
+    showModal: false,
+    posts: []
   }
 
   handleOpenModal = () => {
@@ -19,6 +24,19 @@ class Top extends React.Component<PropsInterface> {
 
   handleCloseModal = () => {
     this.setState({ showModal: false })
+  }
+
+  componentDidMount = async () => {
+    const postsData = await db
+      .collection('posts')
+      .orderBy('created', 'desc')
+      .get()
+    const posts = postsData.docs.map(doc => {
+      return doc.data()
+    })
+    this.setState({ posts })
+
+    console.log(posts)
   }
 
   render() {
@@ -62,23 +80,15 @@ class Top extends React.Component<PropsInterface> {
           </div>
 
           <div className="columns section is-multiline">
-            <div className="column is-6">
-              <Link to={`/photo/fds`}>
-                <Image cloudName={cloudinary.cloudName} publicId="sbuabmte0jj7nxhxcuxz.jpg" >
-                  <Transformation width="1500" crop="pad" />
-                </Image>
-              </Link>
-            </div>
-            <div className="column is-6">
-              <Image cloudName={cloudinary.cloudName} publicId="sbuabmte0jj7nxhxcuxz.jpg" >
-                <Transformation width="1500" crop="pad" />
-              </Image>
-            </div>
-            <div className="column is-6">
-              <Image cloudName={cloudinary.cloudName} publicId="sbuabmte0jj7nxhxcuxz.jpg" >
-                <Transformation width="1500" crop="pad" />
-              </Image>
-            </div>
+            {this.state.posts.map((post: any, index: number) => {
+              return <div className="column is-4" key={index}>
+                <Link to={`/photo/${post.id}`}>
+                  <Image cloudName={cloudinary.cloudName} publicId={post.publicId} >
+                    <Transformation width="800" crop="pad" />
+                  </Image>
+                </Link>
+              </div>
+            })}
           </div>
         </div>
         <Modal
