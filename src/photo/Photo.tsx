@@ -2,11 +2,9 @@ import React from 'react'
 import Modal from 'react-modal'
 import PhotoShareModal from '../components/PhotoShareModal'
 import { Pannellum } from "pannellum-react"
-import myImage from '../img/360.jpg'
-import woq from "../img/woq.jpg"
 import { Link, RouteComponentProps } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHeart, faShareSquare } from '@fortawesome/free-regular-svg-icons'
+import { faShareSquare } from '@fortawesome/free-regular-svg-icons'
 import './Photo.scss'
 import firebase from '../plugins/firebase'
 import 'firebase/firestore'
@@ -14,16 +12,26 @@ import { cloudinary as cloudinaryConst } from '../Const'
 import cloudinary from 'cloudinary-core'
 import { isMobile } from 'react-device-detect'
 import Moment from 'react-moment'
+import Like from './Like'
+import Liked from './Liked'
+import { connect } from 'react-redux'
+import { StateInterface as StoreInterface } from '../reducers'
 
 const cl = new cloudinary.Cloudinary({cloud_name: cloudinaryConst.cloudName, secure: true});
 const db = firebase.firestore()
 
-export default class Profile extends React.Component<RouteComponentProps> {
+class Photo extends React.Component<PropsInterface> {
   state: StateInterface = {
     isOpenPhotoMenuModal: false,
     post: {},
     photoUrl: '',
-    user: {}
+    user: {},
+    postId: '',
+    isLiked: false
+  }
+
+  setIsLiked = (isLiked: boolean) => {
+    this.setState({ isLiked: isLiked })
   }
 
   handleCloseModal = () => {
@@ -37,9 +45,9 @@ export default class Profile extends React.Component<RouteComponentProps> {
   componentDidMount = async () => {
     const params = this.props.match.params as ParamsInterface
     const photoId = params.id
+    this.setState({ postId: photoId })
     const postData = await db.collection('posts').doc(photoId).get()
     const post = postData.data()
-    console.log(post)
     let url: string
     if (isMobile) {
       url = cl.url(post!.publicId, { width: 2000, crop: 'scale'})
@@ -51,14 +59,18 @@ export default class Profile extends React.Component<RouteComponentProps> {
       post
     })
 
-    const userData = await db.collection('users').doc(post!.userId).get()
+    const userData = await db
+      .collection('users')
+      .doc(post!.userId)
+      .get()
     this.setState({
       user: userData.data()
     })
   }
 
   render() {
-    const { post, photoUrl, user } = this.state
+    const { post, photoUrl, user, postId, isLiked } = this.state
+    const { loginUser } = this.props
     return (
       <div id="photo-page">
         <Pannellum
@@ -78,11 +90,19 @@ export default class Profile extends React.Component<RouteComponentProps> {
 
         <div className="column is-10 container">
           <div id="photo-tools" className="flex">
-            <a className="photo-tools-item">
-              <span className="icon is-medium">
-                <FontAwesomeIcon icon={faHeart} size="lg" />
-              </span>
-            </a>
+            {isLiked ? (
+              <Liked
+                postId={postId}
+                userId={loginUser.uid}
+                setIsLiked={this.setIsLiked}
+              />
+            ) : (
+              <Like
+                postId={postId}
+                userId={loginUser.uid}
+                setIsLiked={this.setIsLiked}
+              />
+            )}
             <a className="photo-tools-item" onClick={this.handleOpenPhotoShareModal}>
               <span className="icon is-medium">
                 <FontAwesomeIcon icon={faShareSquare} size="lg" />
@@ -184,9 +204,26 @@ interface ParamsInterface {
   id: string
 }
 
+interface PropsInterface extends RouteComponentProps {
+  loginUser: StoreInterface['loginUser']
+}
+
 interface StateInterface {
   isOpenPhotoMenuModal: boolean,
   post: any,
   photoUrl: string,
-  user: any
+  user: any,
+  postId: string,
+  isLiked: boolean
 }
+
+const mapStateToProps = (state: StoreInterface) => {
+  return {
+    loginUser: state.loginUser
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  null
+)(Photo)
