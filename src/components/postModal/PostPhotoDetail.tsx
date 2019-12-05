@@ -9,7 +9,6 @@ import uuid from 'uuid/v4'
 import { StateInterface } from '../../reducers'
 import getUnixTime from '../../plugins/getUnixTime'
 import { withRouter, RouteComponentProps } from 'react-router-dom'
-import { SnackbarProvider, wrapComponent } from 'react-snackbar-alert'
 
 const db = firebase.firestore()
 
@@ -26,11 +25,12 @@ class PostPhotoDetail extends React.Component<PropsInterface> {
     isSubmitting: false
   }
 
-  uploadImage = () => {
+  uploadImage = (id: string) => {
     const formData = new FormData()
     formData.append('file', this.props.imageData);
     formData.append('upload_preset', cloudinary.uploadPreset);
     formData.append('tags', '360gram');
+    formData.append('public_id', `posts/${id}`);
     // For debug purpose only
     // Inspects the content of formData
     // for(var pair of formData.entries()) {
@@ -50,11 +50,11 @@ class PostPhotoDetail extends React.Component<PropsInterface> {
   handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     this.setState({ isSubmitting: true })
-    // Upload image and get public_id
-    const { data } = await this.uploadImage()
     // Save data on db
     const { loginUser } = this.props
     const id = uuid().split('-').join('')
+    // Upload image and get public_id
+    const { data } = await this.uploadImage(id)
     await db
       .collection('posts')
       .doc(id)
