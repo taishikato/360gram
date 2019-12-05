@@ -66,6 +66,16 @@ class Photo extends React.Component<PropsInterface> {
     this.setState({
       user: userData.data()
     })
+
+    // Judge is liked
+    const judgeIfLiked = await db
+      .collection('likes')
+      .where('userId', '==', this.props.loginUser.uid)
+      .where('postId', '==', photoId)
+      .get()
+    if (judgeIfLiked.empty === false) {
+      this.setState({ isLiked: true })
+    }
   }
 
   render() {
