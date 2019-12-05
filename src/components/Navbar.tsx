@@ -8,6 +8,8 @@ import { faArrowUp } from '@fortawesome/free-solid-svg-icons'
 import { PropsInterface } from '../container/LoggedinNavbar'
 import './Navbar.scss'
 import PostModal from './postModal/PostModal'
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
+import Loader from 'react-loader-spinner'
 
 export default class Navbar extends React.Component<PropsInterface> {
   state = {
@@ -36,7 +38,7 @@ export default class Navbar extends React.Component<PropsInterface> {
   }
 
   render() {
-    const { isLogin, loginUser, logoutUser } = this.props
+    const { isLogin, loginUser, logoutUser, checkingAuth } = this.props
     return (
       <nav className="navbar has-shadow is-fixed-top" role="navigation" aria-label="main navigation">
         <div className="container">
@@ -64,53 +66,68 @@ export default class Navbar extends React.Component<PropsInterface> {
             }
           </div>
 
-            {isLogin ? (
-              <div id="nabvar-top" className="navbar-menu">
-                <div className="navbar-end">
-                  <div className="navbar-item has-dropdown is-hoverable">
-                    <a className="navbar-link is-arrowless">
-                      <img src={loginUser.picture} className="is-rounded" width="32" />
-                    </a>
-                    <div className="navbar-dropdown">
-                      <Link to={`/user/${loginUser.username}`} className="navbar-item">
-                        Profile
-                        </Link>
-                      <Link to="/settings" className="navbar-item">
-                        Settings
-                        </Link>
-                      <hr className="navbar-divider"></hr>
-                      <a className="navbar-item" onClick={logoutUser}>
-                        Logout
-                        </a>
-                    </div>
-                  </div>
-                  <div className="navbar-item">
-                    <a onClick={this.handleOpenPostModal} id="upload-button" className="button is-simple is-outlined is-rounded is-medium">
-                      <span className="icon">
-                        <FontAwesomeIcon icon={faArrowUp} />
-                      </span>
-                      <span>
-                        Upload
-                      </span>
-                    </a>
-                  </div>
+          {checkingAuth &&
+            <div id="nabvar-top" className="navbar-menu">
+              <div className="navbar-end">
+                <div className="navbar-item">
+                  <Loader
+                    type="ThreeDots"
+                    color="#000000"
+                    height={40}
+                    width={40}
+                  />
                 </div>
               </div>
-            ) : (
-              <div id="nabvar-top" className="navbar-menu is-hidden-mobile">
-                <div className="navbar-end">
-                  <div className="navbar-item">
-                    <a
-                      className="button is-simple is-outlined is-rounded"
-                      onClick={this.handleOpenModal}
-                    >
-                      Log in/ Sign up
-                    </a>
+            </div>
+          }
+
+          {isLogin && !checkingAuth &&
+            <div id="nabvar-top" className="navbar-menu">
+              <div className="navbar-end">
+                <div className="navbar-item has-dropdown is-hoverable">
+                  <a className="navbar-link is-arrowless">
+                    <img src={loginUser.picture} className="is-rounded" width="32" />
+                  </a>
+                  <div className="navbar-dropdown">
+                    <Link to={`/user/${loginUser.username}`} className="navbar-item">
+                      Profile
+                    </Link>
+                    <Link to="/settings" className="navbar-item">
+                      Settings
+                      </Link>
+                    <hr className="navbar-divider"></hr>
+                    <a className="navbar-item" onClick={logoutUser}>
+                      Logout
+                      </a>
                   </div>
                 </div>
+                <div className="navbar-item">
+                  <a onClick={this.handleOpenPostModal} id="upload-button" className="button is-simple is-outlined is-rounded is-medium">
+                    <span className="icon">
+                      <FontAwesomeIcon icon={faArrowUp} />
+                    </span>
+                    <span>
+                      Upload
+                    </span>
+                  </a>
+                </div>
               </div>
-            )
-            }
+            </div>
+          }
+          {!isLogin && !checkingAuth &&
+            <div id="nabvar-top" className="navbar-menu is-hidden-mobile">
+              <div className="navbar-end">
+                <div className="navbar-item">
+                  <a
+                    className="button is-simple is-outlined is-rounded"
+                    onClick={this.handleOpenModal}
+                  >
+                    Log in/ Sign up
+                  </a>
+                </div>
+              </div>
+            </div>
+          }
         </div >
 
         {/* Login Modal */}

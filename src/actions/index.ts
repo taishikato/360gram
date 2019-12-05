@@ -1,6 +1,7 @@
 import { UserInterface } from '../reducers'
 export const LOGIN = 'login'
 export const LOGOUT = 'logout'
+export const CHEKING_AUTH = 'checkingAuth'
 
 export const loginUser = (user: UserInterface) => ({
   type: LOGIN,
@@ -12,4 +13,9 @@ export const loginUser = (user: UserInterface) => ({
 })
 export const logoutUser = () => ({
   type: LOGOUT
+})
+
+export const checkingAuth = (isChecking: boolean) => ({
+  type: CHEKING_AUTH,
+  isChecking
 })

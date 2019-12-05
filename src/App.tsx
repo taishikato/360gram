@@ -1,6 +1,5 @@
 import React from 'react';
 import { BrowserRouter as Router, Route } from "react-router-dom";
-// import Navbar from './components/Navbar'
 import LoggedinNavbar from './container/LoggedinNavbar'
 import ScrollToTop from './components/ScrollToTop'
 import Top from './top/Top'
@@ -13,7 +12,7 @@ import 'firebase/firestore'
 import getRedirectResult from './plugins/getRedirectResult'
 import auth from './plugins/auth'
 import { connect } from 'react-redux'
-import { loginUser } from './actions';
+import { loginUser, checkingAuth } from './actions';
 import getUnixTime from './plugins/getUnixTime'
 import uuid from 'uuid/v4'
 import { Dispatch } from 'redux'
@@ -27,7 +26,10 @@ class App extends React.Component<PropsInterface> {
   }
   componentDidMount = async () => {
     const authUser = await auth()
-    if (authUser === false) return
+    if (authUser === false) {
+      this.props.finishCheckingAuth()
+      return
+    }
     const result = await getRedirectResult()
     if (result.user !== null) {
       if (result.additionalUserInfo.isNewUser) {
@@ -50,13 +52,13 @@ class App extends React.Component<PropsInterface> {
           .set(newPublicUserData)
         this.props.loginUser(newPublicUserData)
       } else {
-        console.log('既存ユーザーログイン')
         const user = await db
           .collection('users')
           .doc(authUser.uid)
           .get()
         this.props.loginUser(user.data() as UserInterface)
       }
+      this.props.finishCheckingAuth()
       return
     }
     // 通常アクセス
@@ -65,6 +67,7 @@ class App extends React.Component<PropsInterface> {
       .doc(authUser.uid)
       .get()
     this.props.loginUser(user.data() as UserInterface)
+    this.props.finishCheckingAuth()
   }
 
   render() {
@@ -97,6 +100,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     loginUser: (user: UserInterface): void => {
       dispatch(loginUser(user))
+    },
+    finishCheckingAuth: (): void => {
+      dispatch(checkingAuth(false))
     }
   }
 }
@@ -104,7 +110,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
 interface PropsInterface {
   loginUserInfo: UserInterface,
   isLogin: Boolean,
-  loginUser: (user: UserInterface)=> void
+  loginUser: (user: UserInterface) => void,
+  finishCheckingAuth: () => void
 }
 
 export default connect(

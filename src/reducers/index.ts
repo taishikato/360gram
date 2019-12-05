@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux'
-import { LOGIN, LOGOUT } from '../actions'
+import { LOGIN, LOGOUT, CHEKING_AUTH } from '../actions'
 
 const loginUser = (state = {}, action: any) => {
   switch (action.type) {
@@ -29,6 +29,15 @@ const isLogin = (state = false, action: any) => {
   }
 }
 
+const checkingAuth = (state = true, action: any) => {
+  switch (action.type) {
+    case CHEKING_AUTH:
+      return action.isChecking
+    default:
+      return state
+  }
+}
+
 export interface UserInterface {
   name: string,
   uid: string,
@@ -40,10 +49,12 @@ export interface UserInterface {
 
 export interface StateInterface {
   isLogin: Boolean,
-  loginUser: UserInterface
+  loginUser: UserInterface,
+  checkingAuth: boolean
 }
 
 export default combineReducers({
   loginUser,
-  isLogin
+  isLogin,
+  checkingAuth
 })

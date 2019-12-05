@@ -8,7 +8,8 @@ import { UserInterface, StateInterface } from '../reducers'
 const mapStateToProps = (state: StateInterface) => {
   return {
     loginUser: state.loginUser,
-    isLogin: state.isLogin
+    isLogin: state.isLogin,
+    checkingAuth: state.checkingAuth
   }
 }
 
@@ -29,5 +30,6 @@ export default connect(
 export interface PropsInterface {
   isLogin: StateInterface['isLogin'],
   loginUser: UserInterface,
+  checkingAuth: StateInterface['checkingAuth'],
   logoutUser: () => void
 }
