@@ -54,7 +54,6 @@ export default class Profile extends React.Component<RouteComponentProps> {
     this.setState({
       user: userData.data()
     })
-    // console.log(userData.data())
   }
 
   render() {
@@ -122,7 +121,10 @@ export default class Profile extends React.Component<RouteComponentProps> {
               <p id="comment-title" className="has-text-weight-bold is-size-5">
                 Comments
               </p>
-              <ul>
+              <p>
+                Coming soon!
+              </p>
+              {/* <ul>
                 <li className="comment-list flex flex-center">
                   <Link to="/user/woq">
                     <figure className="image is-32x32">
@@ -140,7 +142,7 @@ export default class Profile extends React.Component<RouteComponentProps> {
                     </p>
                   </div>
                 </li>
-              </ul>
+              </ul> */}
             </div>
           </div>
         </div>
