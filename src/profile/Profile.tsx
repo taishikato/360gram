@@ -6,6 +6,8 @@ import firebase from '../plugins/firebase'
 import 'firebase/firestore'
 import { RouteComponentProps } from 'react-router-dom'
 import { UserInterface } from '../reducers'
+import { Image, Transformation } from 'cloudinary-react'
+import { cloudinary } from '../Const'
 
 const db = firebase.firestore()
 
@@ -17,7 +19,8 @@ export default class Profile extends React.Component<RouteComponentProps> {
       uid: '',
       picture: '',
       username: ''
-    }
+    },
+    posts: []
   }
 
   componentDidMount = async () => {
@@ -26,13 +29,25 @@ export default class Profile extends React.Component<RouteComponentProps> {
       .collection('users')
       .where('username', '==', params.username)
       .get()
-    this.setState({
-      user: userData.docs[0].data() as StateInterface
+    const user = userData.docs[0].data() as UserInterface
+    this.setState({ user })
+
+    const postsData = await db
+      .collection('posts')
+      .where('userId', '==', user.uid)
+      .orderBy('created', 'desc')
+      .get()
+    if (postsData.empty === true) {
+      return
+    }
+    const posts = postsData.docs.map(doc => {
+      return doc.data()
     })
+    this.setState({ posts })
   }
 
   render() {
-    const { user } = this.state
+    const { user, posts } = this.state
     return (
       <div className="whiteBg">
         <div className="container">
@@ -53,21 +68,21 @@ export default class Profile extends React.Component<RouteComponentProps> {
           </div>
           <div className="is-devider"></div>
           <div className="columns section is-multiline">
-            <div className="column is-4">
-              <Link to="/photo/tennis-girl">
-                <img src={exampleImg} />
-              </Link>
-            </div>
-            <div className="column is-4">
-              <Link to="/photo/tennis-girl">
-                <img src={exampleImg} />
-              </Link>
-            </div>
-            <div className="column is-4">
-              <Link to="/photo/tennis-girl">
-                <img src={exampleImg} />
-              </Link>
-            </div>
+            {posts.length > 0 ?
+              posts.map((post: any) => {
+                return <div className="column is-4">
+                <Link to={`/photo/${post.id}`}>
+                  <Image cloudName={cloudinary.cloudName} publicId={post.publicId} >
+                    <Transformation width="800" crop="pad" />
+                  </Image>
+                </Link>
+              </div>
+              })
+            : (
+              <div className="column has-text-centered">
+                No post yet
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -80,5 +95,6 @@ interface PropsInterface {
 }
 
 interface StateInterface {
-  user: UserInterface
+  user: UserInterface,
+  posts: []
 }

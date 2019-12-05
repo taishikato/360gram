@@ -35,8 +35,6 @@ class Top extends React.Component<PropsInterface> {
       return doc.data()
     })
     this.setState({ posts })
-
-    console.log(posts)
   }
 
   render() {
