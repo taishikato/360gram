@@ -13,6 +13,7 @@ import 'firebase/firestore'
 import { cloudinary as cloudinaryConst } from '../Const'
 import cloudinary from 'cloudinary-core'
 import { isMobile } from 'react-device-detect'
+import Moment from 'react-moment'
 
 const cl = new cloudinary.Cloudinary({cloud_name: cloudinaryConst.cloudName, secure: true});
 const db = firebase.firestore()
@@ -113,7 +114,9 @@ export default class Profile extends React.Component<RouteComponentProps> {
               <div className="is-devider"></div>
               <div id="photo-info">
                 <div>
-                  2016年6月2日
+                  <Moment unix format="YYYY-MM-DD">
+                    {post.created}
+                  </Moment>
                 </div>
               </div>
             </div>
@@ -143,6 +146,9 @@ export default class Profile extends React.Component<RouteComponentProps> {
                   </div>
                 </li>
               </ul> */}
+              <div>
+                {post.description}
+              </div>
             </div>
           </div>
         </div>
