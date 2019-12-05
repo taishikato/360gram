@@ -8,6 +8,7 @@ import firebase from '../plugins/firebase'
 import 'firebase/firestore'
 import { UserInterface } from '../reducers'
 import { Dispatch } from 'redux'
+import { SnackbarProvider, wrapComponent } from 'react-snackbar-alert'
 
 const db = firebase.firestore()
 
@@ -15,6 +16,7 @@ class Settings extends React.Component<PropsInteface> {
 
   blob: Blob | null = null
   downloadURL: string = ''
+  showSuccess: () => void = () => {}
 
   state = {
     imageData: '',
@@ -32,6 +34,20 @@ class Settings extends React.Component<PropsInteface> {
       username: loginUser.username
     })
   }
+
+  Container = wrapComponent(({ createSnackbar }: { createSnackbar: any }) => {
+    this.showSuccess = () => {
+      console.log('showSnackbar')
+      createSnackbar({
+        message: 'Success to save',
+        theme: 'success',
+      });
+    }
+
+    return (
+      <div></div>
+    )
+  })
 
   handleChange = (e: React.FormEvent<HTMLTextAreaElement>) => {
     this.setState({ bio: e.currentTarget.value })
@@ -82,6 +98,7 @@ class Settings extends React.Component<PropsInteface> {
         loginUser.picture = picture
       }
       loginUser.username = updateItems.username
+      this.showSuccess()
       updateUser(loginUser)
     } catch (err) {
       console.error(err)
@@ -123,6 +140,9 @@ class Settings extends React.Component<PropsInteface> {
     const { imageData, isUpdating } = this.state
     return (
       <section id="settings" className="section">
+        <SnackbarProvider position="top">
+          <this.Container />
+        </SnackbarProvider>
         <div className="columns">
           <form
             id="settings-column"

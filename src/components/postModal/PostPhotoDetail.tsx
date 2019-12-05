@@ -9,6 +9,7 @@ import uuid from 'uuid/v4'
 import { StateInterface } from '../../reducers'
 import getUnixTime from '../../plugins/getUnixTime'
 import { withRouter, RouteComponentProps } from 'react-router-dom'
+import { SnackbarProvider, wrapComponent } from 'react-snackbar-alert'
 
 const db = firebase.firestore()
 
