@@ -16,6 +16,7 @@ import Like from './Like'
 import Liked from './Liked'
 import { connect } from 'react-redux'
 import { StateInterface as StoreInterface } from '../reducers'
+import { env } from '../Const'
 
 const cl = new cloudinary.Cloudinary({cloud_name: cloudinaryConst.cloudName, secure: true});
 const db = firebase.firestore()
@@ -27,7 +28,8 @@ class Photo extends React.Component<PropsInterface> {
     photoUrl: '',
     user: {},
     postId: '',
-    isLiked: false
+    isLiked: false,
+    shareUrl: ''
   }
 
   setIsLiked = (isLiked: boolean) => {
@@ -76,10 +78,12 @@ class Photo extends React.Component<PropsInterface> {
     if (judgeIfLiked.empty === false) {
       this.setState({ isLiked: true })
     }
+
+    this.setState({ shareUrl: `${env.prod.url}/photo/${photoId}` })
   }
 
   render() {
-    const { post, photoUrl, user, postId, isLiked } = this.state
+    const { post, photoUrl, user, postId, isLiked, shareUrl } = this.state
     const { loginUser } = this.props
     return (
       <div id="photo-page">
@@ -203,7 +207,7 @@ class Photo extends React.Component<PropsInterface> {
             }
           }}
         >
-          <PhotoShareModal />
+          <PhotoShareModal url={shareUrl} />
         </Modal>
       </div>
     )
@@ -224,7 +228,8 @@ interface StateInterface {
   photoUrl: string,
   user: any,
   postId: string,
-  isLiked: boolean
+  isLiked: boolean,
+  shareUrl: string
 }
 
 const mapStateToProps = (state: StoreInterface) => {

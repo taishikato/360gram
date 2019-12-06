@@ -3,3 +3,9 @@ export const cloudinary = {
   uploadPreset: 'k8xcjyrj',
   apiKey: '345177252541146'
 }
+
+export const env = {
+  prod: {
+    url: 'https://the360gram.firebaseapp.com'
+  }
+}
