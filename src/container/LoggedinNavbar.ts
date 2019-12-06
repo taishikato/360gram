@@ -15,9 +15,10 @@ const mapStateToProps = (state: StateInterface) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    logoutUser: async () => {
+    logoutUser: async (history: any) => {
       await firebase.auth().signOut()
       dispatch(logoutUser())
+      history.push('/')
     }
   }
 }
@@ -31,5 +32,5 @@ export interface PropsInterface {
   isLogin: StateInterface['isLogin'],
   loginUser: UserInterface,
   checkingAuth: StateInterface['checkingAuth'],
-  logoutUser: () => void
+  logoutUser: (history: any) => void
 }

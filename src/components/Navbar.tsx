@@ -5,13 +5,14 @@ import Modal from 'react-modal'
 import LoginModal from './LoginModal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowUp } from '@fortawesome/free-solid-svg-icons'
-import { PropsInterface } from '../container/LoggedinNavbar'
+import { PropsInterface as ContainerPropsInterface } from '../container/LoggedinNavbar'
 import './Navbar.scss'
 import PostModal from './postModal/PostModal'
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
 import Loader from 'react-loader-spinner'
+import { withRouter, RouteComponentProps } from 'react-router-dom'
 
-export default class Navbar extends React.Component<PropsInterface> {
+class Navbar extends React.Component<PropsInterface> {
   state = {
     showModal: false,
     showPostModal: false
@@ -38,7 +39,7 @@ export default class Navbar extends React.Component<PropsInterface> {
   }
 
   render() {
-    const { isLogin, loginUser, logoutUser, checkingAuth } = this.props
+    const { isLogin, loginUser, logoutUser, checkingAuth, history } = this.props
     return (
       <nav className="navbar has-shadow is-fixed-top" role="navigation" aria-label="main navigation">
         <div className="container">
@@ -106,7 +107,7 @@ export default class Navbar extends React.Component<PropsInterface> {
                       Settings
                       </Link>
                     <hr className="navbar-divider"></hr>
-                    <a className="navbar-item" onClick={logoutUser}>
+                    <a className="navbar-item" onClick={() => logoutUser(history)}>
                       Logout
                       </a>
                   </div>
@@ -194,3 +195,7 @@ export default class Navbar extends React.Component<PropsInterface> {
     )
   }
 }
+
+export default withRouter(Navbar)
+
+interface PropsInterface extends RouteComponentProps, ContainerPropsInterface{}

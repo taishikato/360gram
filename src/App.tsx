@@ -71,6 +71,7 @@ class App extends React.Component<PropsInterface> {
     this.props.finishCheckingAuth()
   }
 
+
   render() {
     return (
       <div className="App">
