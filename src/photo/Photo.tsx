@@ -69,6 +69,12 @@ class Photo extends React.Component<PropsInterface> {
       user: userData.data()
     })
 
+    this.setState({ shareUrl: `${env.prod.url}/photo/${photoId}` })
+
+    if (!this.props.isLogin) {
+      return
+    }
+
     // Judge is liked
     const judgeIfLiked = await db
       .collection('likes')
@@ -78,8 +84,6 @@ class Photo extends React.Component<PropsInterface> {
     if (judgeIfLiked.empty === false) {
       this.setState({ isLiked: true })
     }
-
-    this.setState({ shareUrl: `${env.prod.url}/photo/${photoId}` })
   }
 
   render() {
@@ -219,7 +223,8 @@ interface ParamsInterface {
 }
 
 interface PropsInterface extends RouteComponentProps {
-  loginUser: StoreInterface['loginUser']
+  loginUser: StoreInterface['loginUser'],
+  isLogin: boolean
 }
 
 interface StateInterface {
@@ -234,6 +239,7 @@ interface StateInterface {
 
 const mapStateToProps = (state: StoreInterface) => {
   return {
+    isLogin: state.isLogin,
     loginUser: state.loginUser
   }
 }
