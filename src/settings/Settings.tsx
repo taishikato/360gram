@@ -9,6 +9,7 @@ import 'firebase/firestore'
 import { UserInterface } from '../reducers'
 import { Dispatch } from 'redux'
 import { SnackbarProvider, wrapComponent } from 'react-snackbar-alert'
+import { RouteComponentProps } from 'react-router-dom'
 
 const db = firebase.firestore()
 
@@ -27,7 +28,10 @@ class Settings extends React.Component<PropsInteface> {
   }
 
   componentDidMount = () => {
-    const { loginUser } = this.props
+    const { isLogin, loginUser } = this.props
+    if (!isLogin) {
+      this.props.history.push('/404');
+    }
     this.setState({
       imageData: loginUser.picture,
       bio: loginUser.bio,
@@ -201,6 +205,7 @@ class Settings extends React.Component<PropsInteface> {
 
 const mapStateToProps = (state: StateInterface) => {
   return {
+    isLogin: state.isLogin,
     loginUser: state.loginUser,
   }
 }
@@ -218,11 +223,13 @@ export default connect(
   mapDispacthToProps
 )(Settings)
 
-interface PropsInteface {
+interface PropsInteface extends RouteComponentProps {
   loginUser: UserInterface,
+  isLogin: boolean,
   updateUser: (loginUserData: UserInterface) => void
 }
 
 interface StateInterface {
-  loginUser: UserInterface
+  loginUser: UserInterface,
+  isLogin: boolean
 }
