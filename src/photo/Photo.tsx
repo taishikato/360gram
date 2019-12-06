@@ -1,10 +1,12 @@
 import React from 'react'
 import Modal from 'react-modal'
 import PhotoShareModal from '../components/PhotoShareModal'
+import PhotoEditModal from '../components/PhotoEditModal'
 import { Pannellum } from "pannellum-react"
 import { Link, RouteComponentProps } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShareSquare } from '@fortawesome/free-regular-svg-icons'
+import { faEllipsisH } from '@fortawesome/free-solid-svg-icons'
 import './Photo.scss'
 import firebase from '../plugins/firebase'
 import 'firebase/firestore'
@@ -24,6 +26,7 @@ const db = firebase.firestore()
 class Photo extends React.Component<PropsInterface> {
   state: StateInterface = {
     isOpenPhotoMenuModal: false,
+    isOpenEditModal: false,
     post: {},
     photoUrl: '',
     user: {},
@@ -38,10 +41,15 @@ class Photo extends React.Component<PropsInterface> {
 
   handleCloseModal = () => {
     this.setState({ isOpenPhotoMenuModal: false })
+    this.setState({ isOpenEditModal: false })
   }
 
   handleOpenPhotoShareModal = () => {
     this.setState({ isOpenPhotoMenuModal: true })
+  }
+
+  handleOpenEditModal = () => {
+    this.setState({ isOpenEditModal: true })
   }
 
   componentDidMount = async () => {
@@ -126,11 +134,11 @@ class Photo extends React.Component<PropsInterface> {
                 <FontAwesomeIcon icon={faShareSquare} size="lg" />
               </span>
             </a>
-            {/* <a className="photo-tools-item">
+            <a className="photo-tools-item" onClick={this.handleOpenEditModal}>
               <span className="icon is-medium">
                 <FontAwesomeIcon icon={faEllipsisH} size="lg" />
               </span>
-            </a> */}
+            </a>
           </div>
           <div className="columns is-variable is-8">
             <div className="column is-6">
@@ -190,6 +198,7 @@ class Photo extends React.Component<PropsInterface> {
             </div>
           </div>
         </div>
+        {/* Share Modal */}
         <Modal
           isOpen={this.state.isOpenPhotoMenuModal}
           onRequestClose={this.handleCloseModal}
@@ -213,6 +222,31 @@ class Photo extends React.Component<PropsInterface> {
         >
           <PhotoShareModal url={shareUrl} />
         </Modal>
+
+        {/* Edit Modal */}
+        <Modal
+          isOpen={this.state.isOpenEditModal}
+          onRequestClose={this.handleCloseModal}
+          className="menu"
+          style={{
+            overlay: {
+              zIndex: 100000,
+              backgroundColor: 'rgba(0, 0, 0, 0.7)'
+            },
+            content: {
+              width: '300px',
+              maxWidth: '100%',
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translateY(-50%)translateX(-50%)',
+              backgroundColor: '#ffffff',
+              borderRadius: '3px'
+            }
+          }}
+        >
+          <PhotoEditModal postId={postId} history={this.props.history} />
+        </Modal>
       </div>
     )
   }
@@ -229,6 +263,7 @@ interface PropsInterface extends RouteComponentProps {
 
 interface StateInterface {
   isOpenPhotoMenuModal: boolean,
+  isOpenEditModal: boolean,
   post: any,
   photoUrl: string,
   user: any,
