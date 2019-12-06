@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import LoggedinNavbar from './container/LoggedinNavbar'
 import ScrollToTop from './components/ScrollToTop'
 import Top from './top/Top'
@@ -17,6 +17,7 @@ import getUnixTime from './plugins/getUnixTime'
 import uuid from 'uuid/v4'
 import { Dispatch } from 'redux'
 import { StateInterface, UserInterface } from './reducers'
+import NotFound from './notFound/NotFound'
 
 const db = firebase.firestore()
 
@@ -77,10 +78,13 @@ class App extends React.Component<PropsInterface> {
           <ScrollToTop>
             <LoggedinNavbar />
             <div>
-              <Route exact path="/" component={Top} />
-              <Route path="/user/:username" component={Profile} />
-              <Route path="/photo/:id" component={Photo} />
-              <Route path="/settings" component={settings} />
+              <Switch>
+                <Route exact path="/" component={Top} />
+                <Route path="/user/:username" component={Profile} />
+                <Route path="/photo/:id" component={Photo} />
+                <Route path="/settings" component={settings} />
+                <Route component={NotFound} />
+              </Switch>
             </div>
           </ScrollToTop>
         </Router>
