@@ -215,7 +215,7 @@ class Photo extends React.Component<PropsInterface> {
                     {post.created}
                   </Moment>
                 </div>
-                <div id="description">
+                <div id="description" style={{whiteSpace: 'pre-line'}}>
                   {post.description}
                 </div>
               </div>
