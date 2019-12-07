@@ -183,11 +183,13 @@ class Photo extends React.Component<PropsInterface> {
                 <FontAwesomeIcon icon={faShareSquare} size="lg" />
               </span>
             </a>
-            <a className="photo-tools-item" onClick={this.handleOpenEditMenuModal}>
-              <span className="icon is-medium">
-                <FontAwesomeIcon icon={faEllipsisH} size="lg" />
-              </span>
-            </a>
+            {loginUser.uid === post.userId &&
+              <a className="photo-tools-item" onClick={this.handleOpenEditMenuModal}>
+                <span className="icon is-medium">
+                  <FontAwesomeIcon icon={faEllipsisH} size="lg" />
+                </span>
+              </a>
+            }
           </div>
           <div className="columns is-variable is-8">
             <div className="column is-6">
