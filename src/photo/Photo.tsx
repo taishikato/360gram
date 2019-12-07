@@ -2,6 +2,7 @@ import React from 'react'
 import Modal from 'react-modal'
 import PhotoShareModal from '../components/PhotoShareModal'
 import PhotoEditModal from '../components/PhotoEditModal'
+import EditModal from './EditModal'
 import { Pannellum } from "pannellum-react"
 import { Link, RouteComponentProps } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -19,13 +20,17 @@ import Liked from './Liked'
 import { connect } from 'react-redux'
 import { StateInterface as StoreInterface } from '../reducers'
 import { env } from '../Const'
+import { SnackbarProvider, wrapComponent } from 'react-snackbar-alert'
 
 const cl = new cloudinary.Cloudinary({cloud_name: cloudinaryConst.cloudName, secure: true});
 const db = firebase.firestore()
 
 class Photo extends React.Component<PropsInterface> {
+  showSuccess: () => void = () => {}
+
   state: StateInterface = {
     isOpenPhotoMenuModal: false,
+    isOpenEditMenuModal: false,
     isOpenEditModal: false,
     post: {},
     photoUrl: '',
@@ -35,12 +40,26 @@ class Photo extends React.Component<PropsInterface> {
     shareUrl: ''
   }
 
+  Container = wrapComponent(({ createSnackbar }: { createSnackbar: any }) => {
+    this.showSuccess = () => {
+      createSnackbar({
+        message: 'Success to update',
+        theme: 'success',
+      });
+    }
+
+    return (
+      <div></div>
+    )
+  })
+
   setIsLiked = (isLiked: boolean) => {
     this.setState({ isLiked: isLiked })
   }
 
   handleCloseModal = () => {
     this.setState({ isOpenPhotoMenuModal: false })
+    this.setState({ isOpenEditMenuModal: false })
     this.setState({ isOpenEditModal: false })
   }
 
@@ -48,8 +67,35 @@ class Photo extends React.Component<PropsInterface> {
     this.setState({ isOpenPhotoMenuModal: true })
   }
 
+  handleOpenEditMenuModal = () => {
+    this.setState({ isOpenEditMenuModal: true })
+  }
+
   handleOpenEditModal = () => {
     this.setState({ isOpenEditModal: true })
+  }
+
+  setPost: () => Promise<void> = async () => {
+    const postId = this.state.postId
+    const postData = await db.collection('posts').doc(postId).get()
+    const post = postData.data()
+    this.setState({ post })
+  }
+
+  setTitle: (title: string) => void = (title: string) => {
+    this.setState((prevState: StateInterface) => {
+      const post = { ...prevState.post }
+      post.title = title
+      return { post }
+    })
+  }
+
+  setDescription: (description: string) => void = (description: string) => {
+    this.setState((prevState: StateInterface) => {
+      const post = { ...prevState.post }
+      post.description = description
+      return { post }
+    })
   }
 
   componentDidMount = async () => {
@@ -99,6 +145,9 @@ class Photo extends React.Component<PropsInterface> {
     const { loginUser } = this.props
     return (
       <div id="photo-page">
+        <SnackbarProvider position="top">
+          <this.Container />
+        </SnackbarProvider>
         <Pannellum
           width="100%"
           height="500px"
@@ -134,7 +183,7 @@ class Photo extends React.Component<PropsInterface> {
                 <FontAwesomeIcon icon={faShareSquare} size="lg" />
               </span>
             </a>
-            <a className="photo-tools-item" onClick={this.handleOpenEditModal}>
+            <a className="photo-tools-item" onClick={this.handleOpenEditMenuModal}>
               <span className="icon is-medium">
                 <FontAwesomeIcon icon={faEllipsisH} size="lg" />
               </span>
@@ -223,9 +272,9 @@ class Photo extends React.Component<PropsInterface> {
           <PhotoShareModal url={shareUrl} />
         </Modal>
 
-        {/* Edit Modal */}
+        {/* Edit Menu Modal */}
         <Modal
-          isOpen={this.state.isOpenEditModal}
+          isOpen={this.state.isOpenEditMenuModal}
           onRequestClose={this.handleCloseModal}
           className="menu"
           style={{
@@ -245,7 +294,40 @@ class Photo extends React.Component<PropsInterface> {
             }
           }}
         >
-          <PhotoEditModal postId={postId} history={this.props.history} />
+          <PhotoEditModal postId={postId} history={this.props.history} handleOpenEditModal={this.handleOpenEditModal} />
+        </Modal>
+
+        {/* Edit Modal */}
+        <Modal
+          isOpen={this.state.isOpenEditModal}
+          onRequestClose={this.handleCloseModal}
+          className="menu"
+          style={{
+            overlay: {
+              zIndex: 100000,
+              backgroundColor: 'rgba(0, 0, 0, 0.7)'
+            },
+            content: {
+              width: '500px',
+              maxWidth: '100%',
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translateY(-50%)translateX(-50%)',
+              backgroundColor: '#ffffff',
+              borderRadius: '3px'
+            }
+          }}
+        >
+          <EditModal
+            postId={postId}
+            title={post.title}
+            description={post.description}
+            handleCloseModal={this.handleCloseModal}
+            showSuccessSnackbar={this.showSuccess}
+            setTitle={this.setTitle}
+            setDescription={this.setDescription}
+          />
         </Modal>
       </div>
     )
@@ -263,6 +345,7 @@ interface PropsInterface extends RouteComponentProps {
 
 interface StateInterface {
   isOpenPhotoMenuModal: boolean,
+  isOpenEditMenuModal: boolean,
   isOpenEditModal: boolean,
   post: any,
   photoUrl: string,
