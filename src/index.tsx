@@ -7,6 +7,8 @@ import rootReducer from './reducers'
 import './index.scss';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import ReactGA from 'react-ga';
+ReactGA.initialize('UA-27648393-19');
 
 const store = createStore(rootReducer)
 
