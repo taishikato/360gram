@@ -15,13 +15,23 @@ const handleLike = async (
   addLikeCount: () => void
 ): Promise<void> => {
   e.preventDefault()
-  await db
-    .collection('likes')
-    .add({
-      postId,
-      userId,
-      created: getUnixTime()
-    })
+  if (userId === undefined) {
+    // no login user
+    await db
+      .collection('likes')
+      .add({
+        postId,
+        created: getUnixTime()
+      })
+  } else {
+    await db
+      .collection('likes')
+      .add({
+        postId,
+        userId,
+        created: getUnixTime()
+      })
+  }
   setIsLiked(true)
   addLikeCount()
 }

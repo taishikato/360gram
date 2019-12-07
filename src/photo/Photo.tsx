@@ -185,7 +185,6 @@ class Photo extends React.Component<PropsInterface> {
           <div id="photo-tools" className="flex">
             {isLiked ? (
               <Liked
-                postId={postId}
                 userId={loginUser.uid}
                 setIsLiked={this.setIsLiked}
                 reduceLikeCount={this.reduceLikeCount}

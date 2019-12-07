@@ -8,12 +8,15 @@ import asyncForEach from '../plugins/asyncForEach'
 const db = firebase.firestore()
 
 const handleDislike = async (
-  e: MouseEvent, postId: string,
+  e: MouseEvent,
   userId: string,
   setIsLiked: (isLiked: boolean) => void,
   reduceLikeCount: () => void
 ): Promise<void> => {
   e.preventDefault()
+  if (userId === undefined) {
+    return
+  }
   const likeData = await db
     .collection('likes')
     .where('userId', '==', userId)
@@ -31,7 +34,7 @@ const handleDislike = async (
 const Liked: React.FC<PropsInterface> = (props: PropsInterface) => {
     return <a
       className="photo-tools-item"
-      onClick={(event) => handleDislike(event, props.postId, props.userId, props.setIsLiked, props.reduceLikeCount)}
+      onClick={(event) => handleDislike(event, props.userId, props.setIsLiked, props.reduceLikeCount)}
     >
     <span className="icon is-medium has-text-danger">
       <FontAwesomeIcon icon={faHeart} size="lg" />
@@ -42,7 +45,6 @@ const Liked: React.FC<PropsInterface> = (props: PropsInterface) => {
 export default Liked
 
 interface PropsInterface {
-  postId: string,
   userId: string,
   setIsLiked: (isLiked: boolean) => void,
   reduceLikeCount: () => void
