@@ -1,4 +1,4 @@
-import { Component, PureComponent, ComponentClass } from 'react';
+import { Component } from 'react';
 import {RouteComponentProps} from 'react-router-dom'
 import { withRouter } from 'react-router'
 

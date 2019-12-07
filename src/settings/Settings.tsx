@@ -10,6 +10,8 @@ import { UserInterface } from '../reducers'
 import { Dispatch } from 'redux'
 import { SnackbarProvider, wrapComponent } from 'react-snackbar-alert'
 import { RouteComponentProps } from 'react-router-dom'
+import queryString from 'query-string'
+import { env } from '../Const'
 
 const db = firebase.firestore()
 
@@ -24,7 +26,8 @@ class Settings extends React.Component<PropsInteface> {
     bio: '',
     username: '',
     isUpdating: false,
-    blob: null
+    blob: null,
+    message: ''
   }
 
   componentDidMount = () => {
@@ -32,6 +35,14 @@ class Settings extends React.Component<PropsInteface> {
     if (!isLogin) {
       this.props.history.push('/404');
     }
+
+    const url = this.props.location.search
+    const params = queryString.parse(url)
+    console.log(params)
+    if (params.mode === 'signUp') {
+      this.setState({ message: 'Please set your profile.' })
+    }
+
     this.setState({
       imageData: loginUser.picture,
       bio: loginUser.bio,
@@ -78,6 +89,9 @@ class Settings extends React.Component<PropsInteface> {
       }
 
       updateItems.bio = this.state.bio
+      if (updateItems.bio === undefined) {
+        updateItems.bio = ''
+      }
 
       // check username
       const usernameUserData = await db
@@ -141,7 +155,7 @@ class Settings extends React.Component<PropsInteface> {
   }
 
   render() {
-    const { imageData, isUpdating } = this.state
+    const { imageData, isUpdating, message } = this.state
     return (
       <section id="settings" className="section">
         <SnackbarProvider position="top">
@@ -153,6 +167,13 @@ class Settings extends React.Component<PropsInteface> {
             className="column is-5 container"
             onSubmit={this.update}
           >
+            {message !== '' &&
+              <article className="message is-info">
+                <div className="message-body">
+                  {message}
+                </div>
+              </article>
+            }
             <p className="has-text-weight-bold">
               Profile
             </p>
@@ -178,11 +199,18 @@ class Settings extends React.Component<PropsInteface> {
                 <div className="control">
                   <input type="text" className="input" value={this.state.username} onChange={this.handleUsernameChange} />
                 </div>
+                <p className="help">username is a part of url <code>
+                  {env.prod.url}/users/{this.state.username}
+                </code></p>
               </div>
               <div className="field">
                 <label className="label">Bio</label>
                 <div className="control">
-                  <textarea value={this.state.bio} className="textarea" placeholder="e.g. Hello world" onChange={this.handleChange}></textarea>
+                  <textarea
+                    value={this.state.bio}
+                    className="textarea"
+                    onChange={this.handleChange}
+                ></textarea>
                 </div>
               </div>
               <div className="field">
@@ -222,6 +250,7 @@ export default connect(
   mapStateToProps,
   mapDispacthToProps
 )(Settings)
+
 
 interface PropsInteface extends RouteComponentProps {
   loginUser: UserInterface,

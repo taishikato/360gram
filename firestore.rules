@@ -4,18 +4,12 @@ service cloud.firestore {
       allow read;
     }
     match /users/{userId} {
-      allow write: if request.auth.uid == userId;
-    }
-    match /users/{userId}/likePosts/{document=**} {
-      allow write: if request.auth.uid == userId;
-    }
-    match /users/{userId}/posts/{document=**} {
-      allow write: if request.auth.uid == userId;
-    }
-    match /posts/{document=**} {
       allow write: if request.auth.uid != null;
     }
-    match /posts/{postId}/comments/{document=**} {
+    match /secretUsers/{userId} {
+      allow write, read: if request.auth.uid == userId;
+    }
+    match /posts/{document=**} {
       allow write: if request.auth.uid != null;
     }
     match /likes/{document=**} {
