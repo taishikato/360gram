@@ -14,9 +14,10 @@ const copyText = (text: string) => {
   return result
 }
 
-const copy = (e: MouseEvent, text: string) => {
+const copy = (e: MouseEvent, text: string, handleCloseModal: () => void) => {
   e.preventDefault()
   copyText(text)
+  handleCloseModal()
 }
 
 const PhotoShareModal: React.FC<PropsInterface>= (props) => {
@@ -40,7 +41,7 @@ const PhotoShareModal: React.FC<PropsInterface>= (props) => {
         </a>
       </li>
       <li>
-        <a className="is-size-5" onClick={(event) => copy(event, props.url)}>
+        <a className="is-size-5" onClick={(event) => copy(event, props.url, props.handleCloseModal)}>
           Copy Link
         </a>
       </li>
@@ -50,5 +51,6 @@ const PhotoShareModal: React.FC<PropsInterface>= (props) => {
 export default PhotoShareModal
 
 interface PropsInterface {
-  url: string
+  url: string,
+  handleCloseModal: () => void
 }

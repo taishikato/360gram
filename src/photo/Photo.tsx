@@ -271,7 +271,7 @@ class Photo extends React.Component<PropsInterface> {
             }
           }}
         >
-          <PhotoShareModal url={shareUrl} />
+          <PhotoShareModal url={shareUrl} handleCloseModal={this.handleCloseModal} />
         </Modal>
 
         {/* Edit Menu Modal */}
