@@ -199,11 +199,11 @@ class Photo extends React.Component<PropsInterface> {
                     {post.title}
                   </p>
                   <p>
-                    by <Link to="/user/takato">{user.name}</Link>
+                    by <Link to={`/user/${user.username}`}>{user.name}</Link>
                   </p>
                 </div>
                 <figure className="image is-64x64">
-                  <Link to="/user/takato">
+                  <Link to={`/user/${user.username}`}>
                     <img className="is-rounded" src={user.picture} alt="" />
                   </Link>
                 </figure>
