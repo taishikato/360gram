@@ -7,7 +7,13 @@ import getUnixTime from '../plugins/getUnixTime'
 
 const db = firebase.firestore()
 
-const handleLike = async (e: MouseEvent, postId: string, userId: string, setIsLiked: (isLiked: boolean) => void): Promise<void> => {
+const handleLike = async (
+  e: MouseEvent,
+  postId: string,
+  userId: string,
+  setIsLiked: (isLiked: boolean) => void,
+  addLikeCount: () => void
+): Promise<void> => {
   e.preventDefault()
   await db
     .collection('likes')
@@ -17,10 +23,11 @@ const handleLike = async (e: MouseEvent, postId: string, userId: string, setIsLi
       created: getUnixTime()
     })
   setIsLiked(true)
+  addLikeCount()
 }
 
 const Like: React.FC<PropsInterface> = (props: PropsInterface) => {
-    return <a className="photo-tools-item" onClick={(event) => handleLike(event, props.postId, props.userId, props.setIsLiked)}>
+    return <a className="photo-tools-item" onClick={(event) => handleLike(event, props.postId, props.userId, props.setIsLiked, props.addLikeCount)}>
     <span className="icon is-medium">
       <FontAwesomeIcon icon={faHeart} size="lg" />
     </span>
@@ -32,5 +39,6 @@ export default Like
 interface PropsInterface {
   postId: string,
   userId: string,
-  setIsLiked: (isLiked: boolean) => void
+  setIsLiked: (isLiked: boolean) => void,
+  addLikeCount: () => void
 }

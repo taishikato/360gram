@@ -37,7 +37,8 @@ class Photo extends React.Component<PropsInterface> {
     user: {},
     postId: '',
     isLiked: false,
-    shareUrl: ''
+    shareUrl: '',
+    likeCount: ''
   }
 
   Container = wrapComponent(({ createSnackbar }: { createSnackbar: any }) => {
@@ -73,6 +74,16 @@ class Photo extends React.Component<PropsInterface> {
 
   handleOpenEditModal = () => {
     this.setState({ isOpenEditModal: true })
+  }
+
+  addLikeCount = () => {
+    const likeCount = this.state.likeCount
+    this.setState({ likeCount: (likeCount as number) + 1 })
+  }
+
+  reduceLikeCount = () => {
+    const likeCount = this.state.likeCount
+    this.setState({ likeCount: (likeCount as number) - 1 })
   }
 
   setPost: () => Promise<void> = async () => {
@@ -125,6 +136,13 @@ class Photo extends React.Component<PropsInterface> {
 
     this.setState({ shareUrl: `${env.prod.url}/photo/${photoId}` })
 
+    // Get like count
+    const likeData = await db
+      .collection('likes')
+      .where('postId', '==', photoId)
+      .get()
+    this.setState({ likeCount: likeData.size })
+
     if (!this.props.isLogin) {
       return
     }
@@ -141,7 +159,7 @@ class Photo extends React.Component<PropsInterface> {
   }
 
   render() {
-    const { post, photoUrl, user, postId, isLiked, shareUrl } = this.state
+    const { post, photoUrl, user, postId, isLiked, shareUrl, likeCount } = this.state
     const { loginUser } = this.props
     return (
       <div id="photo-page">
@@ -170,14 +188,19 @@ class Photo extends React.Component<PropsInterface> {
                 postId={postId}
                 userId={loginUser.uid}
                 setIsLiked={this.setIsLiked}
+                reduceLikeCount={this.reduceLikeCount}
               />
             ) : (
               <Like
                 postId={postId}
                 userId={loginUser.uid}
                 setIsLiked={this.setIsLiked}
+                addLikeCount={this.addLikeCount}
               />
             )}
+            {likeCount > 0 &&
+              <span>{likeCount}</span>
+            }
             <a className="photo-tools-item" onClick={this.handleOpenPhotoShareModal}>
               <span className="icon is-medium">
                 <FontAwesomeIcon icon={faShareSquare} size="lg" />
@@ -354,7 +377,8 @@ interface StateInterface {
   user: any,
   postId: string,
   isLiked: boolean,
-  shareUrl: string
+  shareUrl: string,
+  likeCount: string | number
 }
 
 const mapStateToProps = (state: StoreInterface) => {
