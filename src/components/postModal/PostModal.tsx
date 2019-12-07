@@ -15,13 +15,15 @@ class PostModal extends React.Component<PropsInterface> {
   state = {
     imageData: '',
     previewData: '',
-    showPanorama: false
+    showPanorama: false,
+    isLoadingImage: false
   }
 
   onFileChange = (e: any) => {
     this.setState({
       imageData: '',
-      showPanorama: false
+      showPanorama: false,
+      isLoadingImage: true
     })
     // blob形式に変換
     this.blob = new Blob(e.target.files, { type: 'image/jpeg' })
@@ -44,7 +46,8 @@ class PostModal extends React.Component<PropsInterface> {
         this.setState({
           imageData: e.target!.result,
           previewData,
-          showPanorama: true
+          showPanorama: true,
+          isLoadingImage: false
         })
       }
       reader.readAsDataURL(file)
@@ -52,11 +55,16 @@ class PostModal extends React.Component<PropsInterface> {
   }
 
   render() {
-    const { imageData, previewData, showPanorama } = this.state
+    const { imageData, previewData, showPanorama, isLoadingImage } = this.state
     const { loginUser, handleCloseModal } = this.props
     return (
       <div id="post-modal-wrapper">
-        {showPanorama &&
+        {isLoadingImage &&
+          <span style={{position: 'absolute', top: '50%', left: '50%', transform: 'translateY(-50%)translateX(-50%)'}}>
+            Loading…
+          </span>
+        }
+        {showPanorama && !isLoadingImage &&
           <PostPhotoDetail
             imageData={imageData}
             previewData={previewData}
@@ -64,7 +72,7 @@ class PostModal extends React.Component<PropsInterface> {
             handleCloseModal={handleCloseModal}
           />
         }
-        {!showPanorama &&
+        {!showPanorama && !isLoadingImage &&
           <UploadForm onFileChange={this.onFileChange} />
         }
       </div>

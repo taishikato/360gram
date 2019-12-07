@@ -83,7 +83,7 @@ class PostPhotoDetail extends React.Component<PropsInterface> {
         <div id="panorama-preview" className="column is-8">
           <Pannellum
             width="100%"
-            height="500px"
+            height="400px"
             image={this.props.previewData}
             pitch={10}
             yaw={180}

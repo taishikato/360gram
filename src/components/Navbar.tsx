@@ -179,7 +179,7 @@ class Navbar extends React.Component<PropsInterface> {
             content: {
               width: '100%',
               maxWidth: '1200px',
-              height: '550px',
+              height: '500px',
               position: 'absolute',
               top: '50%',
               left: '50%',
