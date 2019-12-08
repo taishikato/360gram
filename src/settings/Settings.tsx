@@ -40,7 +40,7 @@ class Settings extends React.Component<PropsInteface> {
     const params = queryString.parse(url)
     console.log(params)
     if (params.mode === 'signUp') {
-      this.setState({ message: 'Please set your profile.' })
+      this.setState({ message: 'show' })
     }
 
     this.setState({
@@ -170,7 +170,8 @@ class Settings extends React.Component<PropsInteface> {
             {message !== '' &&
               <article className="message is-info">
                 <div className="message-body">
-                  {message}
+                  Thank you for sign up!<br />
+                  Please set your profile.
                 </div>
               </article>
             }
