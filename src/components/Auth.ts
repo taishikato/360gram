@@ -19,7 +19,6 @@ class Auth extends React.Component<PropsInterface> {
     const authUser = await auth()
     if (authUser === false) {
       this.props.finishCheckingAuth()
-      console.log('not login')
       return
     }
     const result = await getRedirectResult()
@@ -27,7 +26,6 @@ class Auth extends React.Component<PropsInterface> {
       if (result.additionalUserInfo.isNewUser) {
         const created = getUnixTime()
         // Sign Up
-        console.log('新規ユーザー')
         // ユーザー保存
         const userData = result.user
         const userUid = userData.uid
@@ -67,7 +65,6 @@ class Auth extends React.Component<PropsInterface> {
       this.props.finishCheckingAuth()
       return
     }
-    console.log('通常アクセス')
     // 通常アクセス
     const user = await db
       .collection('users')
