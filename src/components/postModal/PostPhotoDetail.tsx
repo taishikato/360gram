@@ -28,15 +28,10 @@ class PostPhotoDetail extends React.Component<PropsInterface> {
 
   uploadImage = (id: string) => {
     const formData = new FormData()
-    formData.append('file', this.props.imageData);
-    formData.append('upload_preset', cloudinary.uploadPreset);
-    formData.append('tags', '360gram');
-    formData.append('public_id', `posts/${id}`);
-    // For debug purpose only
-    // Inspects the content of formData
-    // for(var pair of formData.entries()) {
-    //   console.log(pair[0]+', '+pair[1]);
-    // }
+    formData.append('file', this.props.imageData)
+    formData.append('upload_preset', cloudinary.uploadPreset)
+    formData.append('tags', '360gram')
+    formData.append('public_id', `posts/${id}`)
   
     return axios.post(
       `https://api.cloudinary.com/v1_1/${cloudinary.cloudName}/upload`,
@@ -120,6 +115,7 @@ class PostPhotoDetail extends React.Component<PropsInterface> {
           <div className="field">
             <div className="control submit-button">
               {isSubmitting && <button className="button is-success is-loading">Submit</button> }
+              {isSubmitting && <p className="has-text-centered">It takes time…</p> }
               {title === '' && !isSubmitting && <button className="button is-success has-text-weight-bold" disabled>Submit</button> }
               {title !== '' && !isSubmitting && <input type="submit" className="button is-success has-text-weight-bold" value="Submit" /> }
             </div>
