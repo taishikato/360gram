@@ -49,41 +49,38 @@ export default class Profile extends React.Component<RouteComponentProps> {
   render() {
     const { user, posts } = this.state
     return (
-      <div className="whiteBg">
-        <div className="container">
-          <div className="hero">
-            <div className="hero-body has-text-centered">
-              <div className="container">
-                <figure id="profile-img" className="image is-96x96">
-                  <img className="is-rounded" src={user.picture} alt="" />
-                </figure>
-                <h1 className="title">
-                  {user.name}
-                </h1>
-                <h2 className="subtitle">
-                  {user.bio || 'No bio yet'}
-                </h2>
-              </div>
+      <div>
+        <div className="hero whiteBg">
+          <div className="hero-body has-text-centered" style={{borderBottom: '1px solid #eeeff2'}}>
+            <div className="container">
+              <figure id="profile-img" className="image is-96x96">
+                <img className="is-rounded" src={user.picture} alt="" />
+              </figure>
+              <h1 className="title">
+                {user.name}
+              </h1>
+              <h2 className="subtitle">
+                {user.bio || 'No bio yet'}
+              </h2>
             </div>
           </div>
-          <div className="is-devider"></div>
-          <div className="columns section is-multiline">
-            {posts.length > 0 ?
-              posts.map((post: any) => {
-                return <div className="column is-4">
-                <Link to={`/photo/${post.id}`}>
-                  <Image cloudName={cloudinary.cloudName} publicId={post.publicId} >
-                    <Transformation width="800" crop="pad" />
-                  </Image>
-                </Link>
-              </div>
-              })
-            : (
-              <div className="column has-text-centered">
-                No post yet
-              </div>
-            )}
-          </div>
+        </div>
+        <div className="columns section is-multiline">
+          {posts.length > 0 ?
+            posts.map((post: any) => {
+              return <div className="column is-4">
+              <Link to={`/photo/${post.id}`}>
+                <Image cloudName={cloudinary.cloudName} publicId={post.publicId} >
+                  <Transformation width="800" crop="pad" />
+                </Image>
+              </Link>
+            </div>
+            })
+          : (
+            <div className="column has-text-centered">
+              No post yet
+            </div>
+          )}
         </div>
       </div>
     )
