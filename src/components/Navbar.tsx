@@ -103,7 +103,7 @@ class Navbar extends React.Component<PropsInterface> {
                     <Link to={`/user/${loginUser.username}`} className="navbar-item">
                       Profile
                     </Link>
-                    <Link to="/settings?mode=signUp" className="navbar-item">
+                    <Link to="/settings" className="navbar-item">
                       Settings
                       </Link>
                     <hr className="navbar-divider"></hr>

@@ -155,7 +155,7 @@ class Settings extends React.Component<PropsInteface> {
   }
 
   render() {
-    const { imageData, isUpdating, message } = this.state
+    const { imageData, isUpdating, message, username } = this.state
     return (
       <section id="settings" className="section">
         <SnackbarProvider position="top">
@@ -216,12 +216,17 @@ class Settings extends React.Component<PropsInteface> {
               </div>
               <div className="field">
                 <div className="control has-text-right">
-                  {isUpdating ?
-                    (
-                      <a className="button is-link is-rounded is-loading">Save changes</a>
-                    ) : (
-                      <input type="submit" className="button is-link is-rounded" value="Save changes" />
-                    )}
+                  {isUpdating  && username !== '' &&
+                    <a className="button is-link is-rounded is-loading">Save changes</a>
+                  }
+                  {!isUpdating  && username !== '' &&
+                    <input type="submit" className="button is-link is-rounded" value="Save changes" />
+                  }
+                  {username === '' &&
+                    <button className="button is-link is-rounded" disabled>
+                      Save changes
+                    </button>
+                  }
                 </div>
               </div>
             </div>
