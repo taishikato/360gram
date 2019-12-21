@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { Router, Route, Switch } from "react-router-dom";
 import LoggedinNavbar from './container/LoggedinNavbar'
 import ScrollToTop from './components/ScrollToTop'
 import Top from './top/Top'
@@ -9,11 +9,22 @@ import settings from './settings/Settings'
 import './App.scss';
 import NotFound from './notFound/NotFound'
 import Auth from './components/Auth'
+import ReactGA from 'react-ga'
+import createHistory from 'history/createBrowserHistory'
+ReactGA.initialize('UA-27648393-19', {
+  debug: false
+});
+const history = createHistory()
+history.listen(location => {
+	ReactGA.set({ page: location.pathname })
+	ReactGA.pageview(location.pathname)
+})
 
 const App: React.FC = () => {
+  ReactGA.pageview(window.location.pathname)
   return (
     <div className="App">
-      <Router>
+      <Router history={history} >
         <Auth>
           <ScrollToTop>
             <LoggedinNavbar />

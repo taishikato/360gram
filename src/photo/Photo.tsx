@@ -21,6 +21,7 @@ import { connect } from 'react-redux'
 import { StateInterface as StoreInterface } from '../reducers'
 import { env } from '../Const'
 import { SnackbarProvider, wrapComponent } from 'react-snackbar-alert'
+import CommentTextArea from './CommentTextArea'
 
 const cl = new cloudinary.Cloudinary({cloud_name: cloudinaryConst.cloudName, secure: true});
 const db = firebase.firestore()
@@ -249,11 +250,12 @@ class Photo extends React.Component<PropsInterface> {
               <p>
                 Coming soon!
               </p>
-              {/* <ul>
+              <CommentTextArea />
+              <ul>
                 <li className="comment-list flex flex-center">
                   <Link to="/user/woq">
                     <figure className="image is-32x32">
-                      <img className="is-rounded" src={woq} alt="" />
+                      <img className="is-rounded" src="" alt="" />
                     </figure>
                   </Link>
                   <div className="right-body">
@@ -267,7 +269,7 @@ class Photo extends React.Component<PropsInterface> {
                     </p>
                   </div>
                 </li>
-              </ul> */}
+              </ul>
             </div>
           </div>
         </div>

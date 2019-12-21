@@ -4,14 +4,11 @@ import './assets/Bulma.scss';
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
 import rootReducer from './reducers'
-import './index.scss';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
-import ReactGA from 'react-ga';
-ReactGA.initialize('UA-27648393-19');
+import './index.scss'
+import App from './App'
+import * as serviceWorker from './serviceWorker'
 
 const store = createStore(rootReducer)
-
 ReactDOM.render(
   <Provider store={store}>
     <App />
